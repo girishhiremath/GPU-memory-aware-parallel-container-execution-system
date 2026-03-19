@@ -134,7 +134,7 @@ class StateTracker:
                 current_running
             )
 
-            logger.info(f"📝 Container {container_id} CREATED: {memory_mb}MB, {duration_seconds}s")
+            logger.info(f"Container {container_id} CREATED: {memory_mb}MB, {duration_seconds}s")
             return container_id
 
     def update_container_state(
