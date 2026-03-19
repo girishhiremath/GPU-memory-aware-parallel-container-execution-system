@@ -1,0 +1,8 @@
+Metric,Value
+Simulation Duration (hours),24
+Total Containers,432
+Containers Completed,430
+Peak Memory (MB),4094.5
+Peak GPU Utilization (%),99.96
+OOM Events,0
+Containers/Hour,18.0

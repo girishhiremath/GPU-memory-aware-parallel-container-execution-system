@@ -1,0 +1,147 @@
+{
+  "metadata": {
+    "timestamp": "2026-03-18T18:23:03.486411",
+    "simulator_version": "1.0",
+    "simulation_type": "GPU Scheduler (No Hardware Required)"
+  },
+  "simulation": {
+    "duration_hours": 1,
+    "duration_minutes": 60,
+    "duration_seconds": 3600,
+    "status": "SIMULATED"
+  },
+  "configuration": {
+    "simulation_hours": 1,
+    "gpu_memory_mb": 4096,
+    "base_memory_mb": 862,
+    "memory_multiplier": 1.5,
+    "reset_interval": 3,
+    "max_concurrent": 3,
+    "container_duration_seconds": 600,
+    "launch_interval_seconds": 5
+  },
+  "summary": {
+    "total_containers_launched": 18,
+    "containers_completed_within_window": 16,
+    "containers_running_at_end": 2,
+    "success_rate_percent": 88.88888888888889,
+    "oom_events": 0,
+    "zombie_events": 0
+  },
+  "memory_analysis": {
+    "total_memory_allocated_mb": 24567.0,
+    "peak_memory_mb": 4094.5,
+    "peak_utilization_percent": 99.96337890625,
+    "average_container_memory_mb": 1364.8333333333333
+  },
+  "throughput": {
+    "containers_per_hour": 18.0,
+    "containers_per_minute": 0.3,
+    "average_launch_interval_seconds": 5
+  },
+  "timeline_samples": {
+    "first_snapshot": {
+      "timestamp_s": 0,
+      "active_containers": 1,
+      "memory_mb": 862.0,
+      "utilization_percent": 21.044921875,
+      "running_ids": [
+        1
+      ]
+    },
+    "last_snapshot": {
+      "timestamp_s": 3570,
+      "active_containers": 3,
+      "memory_mb": 4094.5,
+      "utilization_percent": 99.96337890625,
+      "running_ids": [
+        16,
+        17,
+        18
+      ]
+    },
+    "mid_snapshot": {
+      "timestamp_s": 1800,
+      "active_containers": 3,
+      "memory_mb": 4094.5,
+      "utilization_percent": 99.96337890625,
+      "running_ids": [
+        8,
+        9,
+        10
+      ]
+    }
+  },
+  "containers_sample": [
+    {
+      "container_id": 1,
+      "memory_mb": 862.0,
+      "launch_time_seconds": 0,
+      "complete_time_seconds": 600,
+      "state": "COMPLETED"
+    },
+    {
+      "container_id": 2,
+      "memory_mb": 1293.0,
+      "launch_time_seconds": 5,
+      "complete_time_seconds": 605,
+      "state": "COMPLETED"
+    },
+    {
+      "container_id": 3,
+      "memory_mb": 1939.5,
+      "launch_time_seconds": 10,
+      "complete_time_seconds": 610,
+      "state": "COMPLETED"
+    },
+    {
+      "container_id": 4,
+      "memory_mb": 862.0,
+      "launch_time_seconds": 600,
+      "complete_time_seconds": 1200,
+      "state": "COMPLETED"
+    },
+    {
+      "container_id": 5,
+      "memory_mb": 1293.0,
+      "launch_time_seconds": 605,
+      "complete_time_seconds": 1205,
+      "state": "COMPLETED"
+    },
+    {
+      "container_id": 6,
+      "memory_mb": 1939.5,
+      "launch_time_seconds": 610,
+      "complete_time_seconds": 1210,
+      "state": "COMPLETED"
+    },
+    {
+      "container_id": 7,
+      "memory_mb": 862.0,
+      "launch_time_seconds": 1200,
+      "complete_time_seconds": 1800,
+      "state": "COMPLETED"
+    },
+    {
+      "container_id": 8,
+      "memory_mb": 1293.0,
+      "launch_time_seconds": 1205,
+      "complete_time_seconds": 1805,
+      "state": "COMPLETED"
+    },
+    {
+      "container_id": 9,
+      "memory_mb": 1939.5,
+      "launch_time_seconds": 1210,
+      "complete_time_seconds": 1810,
+      "state": "COMPLETED"
+    },
+    {
+      "container_id": 10,
+      "memory_mb": 862.0,
+      "launch_time_seconds": 1800,
+      "complete_time_seconds": 2400,
+      "state": "COMPLETED"
+    }
+  ]
+}

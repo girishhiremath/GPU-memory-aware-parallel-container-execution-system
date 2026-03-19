@@ -1,0 +1,48 @@
+# Worker image with CUDA toolkit for GPU memory management
+# Requirements from 4.2:
+# - Base image must include CUDA toolkit
+# - Accept env vars: CONTAINER_ID, MEMORY_MB, DURATION_SEC
+# - Block exactly MEMORY_MB of GPU memory on startup
+# - Report memory allocated to scheduler via shared state or IPC
+# - Run for exactly DURATION_SEC
+# - Release ALL GPU memory before exit (verified by nvidia-smi)
+# - Exit with code 0 on success, non-zero on OOM
+
+FROM nvidia/cuda:12.2.0-runtime-ubuntu22.04
+
+WORKDIR /app
+
+# Install Python and dependencies
+RUN apt-get update && apt-get install -y \
+    python3.11 \
+    python3-pip \
+    build-essential \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set python3.11 as default
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.11 1
+
+# Install Python packages with PyTorch for GPU support
+RUN pip install --no-cache-dir \
+    numpy==1.24.3 \
+    torch==2.1.0 \
+    torchvision==0.16.0
+
+COPY worker/worker.py /app/worker/worker.py
+COPY worker/entrypoint.sh /app/worker/entrypoint.sh
+
+# Make entrypoint executable
+RUN chmod +x /app/worker/entrypoint.sh
+
+# Required environment variables from 4.2
+ENV PYTHONUNBUFFERED=1
+ENV CONTAINER_ID=""
+ENV MEMORY_MB=""
+ENV DURATION_SEC=600
+
+# Enable GPU support
+ENV NVIDIA_VISIBLE_DEVICES=all
+ENV NVIDIA_DRIVER_CAPABILITIES=compute,utility
+
+ENTRYPOINT ["/app/worker/entrypoint.sh"]

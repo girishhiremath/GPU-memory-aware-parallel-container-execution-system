@@ -1,0 +1,33 @@
+# GPU Scheduler Project Dependencies
+
+# Core Python libraries (standard library, no installation needed):
+# - logging
+# - time
+# - json
+# - threading
+# - dataclasses
+# - typing
+# - datetime
+# - sys
+# - os
+# - signal
+# - subprocess
+# - pathlib
+# - enum
+# - configparser
+# - concurrent.futures
+# - gc
+
+# Third-party dependencies:
+
+# PyTorch - For GPU memory allocation and GPU operations
+torch>=2.0.0
+
+# NumPy - Used by PyTorch and for numerical operations
+numpy>=1.20.0
+
+# # Flask - HTTP server for metrics endpoint
+# flask>=2.0.0
+
+# # Prometheus client - Metrics collection and export
+# prometheus_client>=0.16.0
