@@ -370,7 +370,7 @@ class CSVReporter:
                     else:
                         break
 
-                feasible = "✓ YES" if max_n >= 1 else "✗ NO"
+                feasible = "YES" if max_n >= 1 else "NO"
 
                 writer.writerow([
                     p,
@@ -473,7 +473,7 @@ class CSVReporter:
                             f"{total_memory:.1f}",
                             f"{available:.1f}",
                             f"Container {container_num} launched",
-                            f'✓ YES ({len(active_containers)}/{self.config.max_concurrent_containers})',
+                            f'YES ({len(active_containers)}/{self.config.max_concurrent_containers})',
                             f'{len(active_containers)} now active'
                         ])
                         container_num += 1
