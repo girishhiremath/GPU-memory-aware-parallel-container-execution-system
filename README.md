@@ -267,6 +267,44 @@ graph TD
    Reports --> End["Complete"]
 ```
 
+## Container Execution Sequence
+
+```mermaid
+sequenceDiagram
+    participant S as Scheduler
+    participant C as Container Runner
+    participant W as Worker Process
+    participant M as Memory Manager
+
+    S->>C: run_container(config)
+    C->>W: spawn process (Popen)
+    Note over W: CREATED -> STARTING
+
+    W->>W: initialize runtime
+    Note over W: STARTING -> ALLOCATING_MEMORY
+
+    C-->>S: on_start(container_id)
+    Note over S: state = RUNNING and start_time recorded
+
+    W->>M: allocate GPU memory
+    Note over M: reserve M_n MB
+
+    W->>W: execute workload
+    Note over W: active for duration_sec
+
+    W-->>C: process exits
+    Note over W: RUNNING -> RELEASING_MEMORY
+
+    C-->>S: on_complete(container_id)
+    Note over S: mark COMPLETED/FAILED and end_time recorded
+
+    M-->>M: release GPU memory
+    Note over M: return M_n MB to pool
+
+    C-->>S: on_error(container_id, error_msg)
+    Note over S: log failure details
+```
+
 ## Development Notes
 
 - The scheduler runs in a single thread and is non-blocking
