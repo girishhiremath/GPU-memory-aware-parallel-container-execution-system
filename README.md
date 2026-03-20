@@ -237,7 +237,7 @@ This simulates containers to verify the scheduler logic works correctly.
 ## Scheduler state machine diagram
 ```mermaid
 graph TD
-   Start["Scheduler Started<br/>simulation_duration_hours<br/>set"] -->|"Main Loop"| Step["step called<br/>Every 0.01 seconds"]
+   Start["Scheduler Started<br/>simulation_duration_hours<br/>set"] -->|"Main Loop"| Step["step called<br/>Every step_interval_seconds<br/>seconds"]
 
    Step -->|"Check end time"| EndCheck{"Simulation<br/>complete?"}
 
