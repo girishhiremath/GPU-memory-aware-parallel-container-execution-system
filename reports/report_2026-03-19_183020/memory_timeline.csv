@@ -1,7 +1,0 @@
-MEMORY USAGE TIMELINE
-Configuration:
-  Total GPU Memory: 4096.0 MB
-  Base Memory: 862.0 MB
-  Memory Multiplier: 1.5
-
-Timestamp (s),Active Containers (count),Total Memory Used (MB),Used %,Remaining Capacity (MB),Available %,Memory Pressure,Can Launch?
