@@ -234,6 +234,39 @@ python simulation/simulator.py
 
 This simulates containers to verify the scheduler logic works correctly.
 
+**Scheduler state machine diagram**
+```mermaid
+graph TD
+   Start["Scheduler Started<br/>simulation_duration_hours<br/>set"] -->|"Main Loop"| Step["step called<br/>Every 0.01 seconds"]
+
+   Step -->|"Check end time"| EndCheck{"Simulation<br/>complete?"}
+
+   EndCheck -->|"No"| LaunchCheck{"Step interval<br/>passed?"}
+   EndCheck -->|"Yes"| Stop["STOP<br/>Generate reports"]
+
+   LaunchCheck -->|"No"| Step
+   LaunchCheck -->|"Yes"| Launch["_try_launch_container"]
+
+   Launch -->|"Can launch?"| CanLaunch{"Active under max_concurrent<br/>AND memory available?"}
+
+   CanLaunch -->|"No"| Step
+   CanLaunch -->|"Yes"| Register["Register container<br/>Create ContainerRunConfig"]
+
+   Register -->|"Launch worker"| Runner["container_runner.run_container<br/>Spawn subprocess"]
+
+   Runner -->|"Callbacks"| Callbacks["on_start<br/>on_complete<br/>on_error"]
+
+   Callbacks -->|"Update state"| State["State transitions<br/>CREATED to COMPLETED or <br/>FAILED"]
+
+   State -->|"Memory release"| MemNode["Memory released<br/>Back to pool"]
+
+   MemNode -->|"Next iteration"| Step
+
+   Stop -->|"Generate"| Reports["CSV Reports<br/>JSON Report"]
+
+   Reports --> End["Complete"]
+```
+
 ## Development Notes
 
 - The scheduler runs in a single thread and is non-blocking
