@@ -323,9 +323,10 @@ class Scheduler:
             self.running = False
             return
 
-        # Try to launch a container at scheduled times
-        # Per assignment: Container N should launch at time = N * 5 minutes
-        # But we also need to respect memory constraints, so we try at regular intervals
+
+        # Launch containers at regular intervals
+        # Per assignment: Container N should launch every step_interval_seconds
+        # Memory constraints and reset policy are checked in _try_launch_container()
         if current_time - self.last_launch_time >= self.config.step_interval_seconds:
             self._try_launch_container()
             self.last_launch_time = current_time
