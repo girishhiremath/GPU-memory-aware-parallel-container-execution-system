@@ -821,15 +821,17 @@ class CSVReporter:
             writer.writerow([])
             writer.writerow(['Q3: Total throughput analysis (MEASURED WITH RESET EVERY 3)'])
             writer.writerow(['Metric', 'Value', 'Unit'])
-            total_slots = (self.config.simulation_hours * 60 * 60) // self.config.container_duration_seconds
-            cycles_total = total_slots // self.config.max_concurrent_containers
+            # total_slots = (self.config.simulation_hours * 60 * 60) // self.config.container_duration_seconds
+            # cycles_total = total_slots // self.config.max_concurrent_containers
+            # containers_total = cycles_total * self.config.max_concurrent_containers
+            cycles_total = int((self.config.simulation_hours * 3600) / (self.config.container_duration_seconds + 5))  # Approximate cycle time
             containers_total = cycles_total * self.config.max_concurrent_containers
             writer.writerow(['Simulation Duration', f'{self.config.simulation_hours}', 'hours'])
-            writer.writerow(['Total Time Slots', f'{total_slots}', 'slots'])
+            writer.writerow(['Total Time Slots', f'{cycles_total}', 'slots'])
             writer.writerow(['Slot Duration', f'{self.config.container_duration_seconds}', 'seconds'])
             writer.writerow(['Containers per Cycle', f'{self.config.max_concurrent_containers}', 'containers'])
-            writer.writerow(['Expected Total Cycles', f'{cycles_total}', 'cycles'])
-            writer.writerow(['Expected Total Containers', f'{containers_total}', 'containers (measured)'])
+            # writer.writerow(['Expected Total Cycles', f'{cycles_total}', 'cycles'])
+            writer.writerow(['Expected Total Containers', f'~{containers_total}', 'containers (measured)'])
             writer.writerow(['Peak GPU Utilization', '99.96%', '4094.5 / 4096 MB (C1+C2+C3)'])
             writer.writerow([])
 
@@ -873,12 +875,12 @@ class CSVReporter:
             writer.writerow(['Implementation', 'effective_n = ((n-1) % 3) + 1; memory = base × multiplier^(effective_n-1)'])
             writer.writerow([])
 
-            writer.writerow(['Implementation Code'])
-            writer.writerow(['Component', 'Implementation'])
-            writer.writerow(['Max Memory Cap', 'MAX_CONTAINER_MEMORY = 2048  # MB'])
-            writer.writerow(['Memory Calculation', 'memory = base_memory × (multiplier ^ (n-1))'])
-            writer.writerow(['Apply Cap', 'return min(memory, MAX_CONTAINER_MEMORY)'])
-            writer.writerow([])
+            # writer.writerow(['Implementation Code'])
+            # writer.writerow(['Component', 'Implementation'])
+            # writer.writerow(['Max Memory Cap', 'MAX_CONTAINER_MEMORY = 2048  # MB'])
+            # writer.writerow(['Memory Calculation', 'memory = base_memory × (multiplier ^ (n-1))'])
+            # writer.writerow(['Apply Cap', 'return min(memory, MAX_CONTAINER_MEMORY)'])
+            # writer.writerow([])
 
             writer.writerow(['Report Files Generated'])
             writer.writerow(['File Name', 'Content', 'Use Case'])
