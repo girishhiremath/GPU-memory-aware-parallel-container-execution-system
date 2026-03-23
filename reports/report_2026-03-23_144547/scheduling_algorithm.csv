@@ -1,0 +1,214 @@
+PART 2 - SCHEDULING ALGORITHM DESIGN
+Non-blocking Event-Driven Scheduler with Memory Reset Every 3
+Configuration:
+  Base Memory: 862.0 MB
+  Multiplier: 1.5
+  Total GPU Memory: 4096.0 MB
+  Container Duration: 60 seconds
+  Max Concurrent: 3
+  Memory Reset Interval: every 3 containers
+
+SCHEDULER STATE TIMELINE - First 3600 seconds of execution
+Note: Actual containers overlap. Timeline shows scheduling decisions at 5-second intervals.
+
+Time (s),Container ID,State,Memory Required (MB),Active Containers (count),Active IDs,Total Memory Used (MB),Available Memory (MB),Event Description,Launch Decision,Note
+0,1,CREATED,862.0,1,C1,862.0,3234.0,Container 1 launched (reset pos 1),✓ YES (1/3),1 now active
+5,2,CREATED,1293.0,2,"C1, C2",2155.0,1941.0,Container 2 launched (reset pos 2),✓ YES (2/3),2 now active
+10,3,CREATED,1939.5,3,"C1, C2, C3",4094.5,1.5,Container 3 launched (reset pos 3),✓ YES (3/3),3 now active
+60,1,COMPLETED,862.0,2,"C2, C3",3232.5,863.5,Container 1 released resources,N/A,Memory freed
+60,4,CREATED,862.0,3,"C2, C3, C4",4094.5,1.5,Container 4 launched (reset pos 1),✓ YES (3/3),3 now active
+65,2,COMPLETED,1293.0,2,"C3, C4",2801.5,1294.5,Container 2 released resources,N/A,Memory freed
+65,5,CREATED,1293.0,3,"C3, C4, C5",4094.5,1.5,Container 5 launched (reset pos 2),✓ YES (3/3),3 now active
+70,3,COMPLETED,1939.5,2,"C4, C5",2155.0,1941.0,Container 3 released resources,N/A,Memory freed
+70,6,CREATED,1939.5,3,"C4, C5, C6",4094.5,1.5,Container 6 launched (reset pos 3),✓ YES (3/3),3 now active
+120,4,COMPLETED,862.0,2,"C5, C6",3232.5,863.5,Container 4 released resources,N/A,Memory freed
+120,7,CREATED,862.0,3,"C5, C6, C7",4094.5,1.5,Container 7 launched (reset pos 1),✓ YES (3/3),3 now active
+125,5,COMPLETED,1293.0,2,"C6, C7",2801.5,1294.5,Container 5 released resources,N/A,Memory freed
+125,8,CREATED,1293.0,3,"C6, C7, C8",4094.5,1.5,Container 8 launched (reset pos 2),✓ YES (3/3),3 now active
+130,6,COMPLETED,1939.5,2,"C7, C8",2155.0,1941.0,Container 6 released resources,N/A,Memory freed
+130,9,CREATED,1939.5,3,"C7, C8, C9",4094.5,1.5,Container 9 launched (reset pos 3),✓ YES (3/3),3 now active
+180,7,COMPLETED,862.0,2,"C8, C9",3232.5,863.5,Container 7 released resources,N/A,Memory freed
+180,10,CREATED,862.0,3,"C8, C9, C10",4094.5,1.5,Container 10 launched (reset pos 1),✓ YES (3/3),3 now active
+185,8,COMPLETED,1293.0,2,"C9, C10",2801.5,1294.5,Container 8 released resources,N/A,Memory freed
+185,11,CREATED,1293.0,3,"C9, C10, C11",4094.5,1.5,Container 11 launched (reset pos 2),✓ YES (3/3),3 now active
+190,9,COMPLETED,1939.5,2,"C10, C11",2155.0,1941.0,Container 9 released resources,N/A,Memory freed
+190,12,CREATED,1939.5,3,"C10, C11, C12",4094.5,1.5,Container 12 launched (reset pos 3),✓ YES (3/3),3 now active
+240,10,COMPLETED,862.0,2,"C11, C12",3232.5,863.5,Container 10 released resources,N/A,Memory freed
+240,13,CREATED,862.0,3,"C11, C12, C13",4094.5,1.5,Container 13 launched (reset pos 1),✓ YES (3/3),3 now active
+245,11,COMPLETED,1293.0,2,"C12, C13",2801.5,1294.5,Container 11 released resources,N/A,Memory freed
+245,14,CREATED,1293.0,3,"C12, C13, C14",4094.5,1.5,Container 14 launched (reset pos 2),✓ YES (3/3),3 now active
+250,12,COMPLETED,1939.5,2,"C13, C14",2155.0,1941.0,Container 12 released resources,N/A,Memory freed
+250,15,CREATED,1939.5,3,"C13, C14, C15",4094.5,1.5,Container 15 launched (reset pos 3),✓ YES (3/3),3 now active
+300,13,COMPLETED,862.0,2,"C14, C15",3232.5,863.5,Container 13 released resources,N/A,Memory freed
+300,16,CREATED,862.0,3,"C14, C15, C16",4094.5,1.5,Container 16 launched (reset pos 1),✓ YES (3/3),3 now active
+305,14,COMPLETED,1293.0,2,"C15, C16",2801.5,1294.5,Container 14 released resources,N/A,Memory freed
+305,17,CREATED,1293.0,3,"C15, C16, C17",4094.5,1.5,Container 17 launched (reset pos 2),✓ YES (3/3),3 now active
+310,15,COMPLETED,1939.5,2,"C16, C17",2155.0,1941.0,Container 15 released resources,N/A,Memory freed
+310,18,CREATED,1939.5,3,"C16, C17, C18",4094.5,1.5,Container 18 launched (reset pos 3),✓ YES (3/3),3 now active
+360,16,COMPLETED,862.0,2,"C17, C18",3232.5,863.5,Container 16 released resources,N/A,Memory freed
+360,19,CREATED,862.0,3,"C17, C18, C19",4094.5,1.5,Container 19 launched (reset pos 1),✓ YES (3/3),3 now active
+365,17,COMPLETED,1293.0,2,"C18, C19",2801.5,1294.5,Container 17 released resources,N/A,Memory freed
+365,20,CREATED,1293.0,3,"C18, C19, C20",4094.5,1.5,Container 20 launched (reset pos 2),✓ YES (3/3),3 now active
+370,18,COMPLETED,1939.5,2,"C19, C20",2155.0,1941.0,Container 18 released resources,N/A,Memory freed
+370,21,CREATED,1939.5,3,"C19, C20, C21",4094.5,1.5,Container 21 launched (reset pos 3),✓ YES (3/3),3 now active
+420,19,COMPLETED,862.0,2,"C20, C21",3232.5,863.5,Container 19 released resources,N/A,Memory freed
+420,22,CREATED,862.0,3,"C20, C21, C22",4094.5,1.5,Container 22 launched (reset pos 1),✓ YES (3/3),3 now active
+425,20,COMPLETED,1293.0,2,"C21, C22",2801.5,1294.5,Container 20 released resources,N/A,Memory freed
+425,23,CREATED,1293.0,3,"C21, C22, C23",4094.5,1.5,Container 23 launched (reset pos 2),✓ YES (3/3),3 now active
+430,21,COMPLETED,1939.5,2,"C22, C23",2155.0,1941.0,Container 21 released resources,N/A,Memory freed
+430,24,CREATED,1939.5,3,"C22, C23, C24",4094.5,1.5,Container 24 launched (reset pos 3),✓ YES (3/3),3 now active
+480,22,COMPLETED,862.0,2,"C23, C24",3232.5,863.5,Container 22 released resources,N/A,Memory freed
+480,25,CREATED,862.0,3,"C23, C24, C25",4094.5,1.5,Container 25 launched (reset pos 1),✓ YES (3/3),3 now active
+485,23,COMPLETED,1293.0,2,"C24, C25",2801.5,1294.5,Container 23 released resources,N/A,Memory freed
+485,26,CREATED,1293.0,3,"C24, C25, C26",4094.5,1.5,Container 26 launched (reset pos 2),✓ YES (3/3),3 now active
+490,24,COMPLETED,1939.5,2,"C25, C26",2155.0,1941.0,Container 24 released resources,N/A,Memory freed
+490,27,CREATED,1939.5,3,"C25, C26, C27",4094.5,1.5,Container 27 launched (reset pos 3),✓ YES (3/3),3 now active
+540,25,COMPLETED,862.0,2,"C26, C27",3232.5,863.5,Container 25 released resources,N/A,Memory freed
+540,28,CREATED,862.0,3,"C26, C27, C28",4094.5,1.5,Container 28 launched (reset pos 1),✓ YES (3/3),3 now active
+545,26,COMPLETED,1293.0,2,"C27, C28",2801.5,1294.5,Container 26 released resources,N/A,Memory freed
+545,29,CREATED,1293.0,3,"C27, C28, C29",4094.5,1.5,Container 29 launched (reset pos 2),✓ YES (3/3),3 now active
+550,27,COMPLETED,1939.5,2,"C28, C29",2155.0,1941.0,Container 27 released resources,N/A,Memory freed
+550,30,CREATED,1939.5,3,"C28, C29, C30",4094.5,1.5,Container 30 launched (reset pos 3),✓ YES (3/3),3 now active
+600,28,COMPLETED,862.0,2,"C29, C30",3232.5,863.5,Container 28 released resources,N/A,Memory freed
+600,31,CREATED,862.0,3,"C29, C30, C31",4094.5,1.5,Container 31 launched (reset pos 1),✓ YES (3/3),3 now active
+605,29,COMPLETED,1293.0,2,"C30, C31",2801.5,1294.5,Container 29 released resources,N/A,Memory freed
+605,32,CREATED,1293.0,3,"C30, C31, C32",4094.5,1.5,Container 32 launched (reset pos 2),✓ YES (3/3),3 now active
+610,30,COMPLETED,1939.5,2,"C31, C32",2155.0,1941.0,Container 30 released resources,N/A,Memory freed
+610,33,CREATED,1939.5,3,"C31, C32, C33",4094.5,1.5,Container 33 launched (reset pos 3),✓ YES (3/3),3 now active
+660,31,COMPLETED,862.0,2,"C32, C33",3232.5,863.5,Container 31 released resources,N/A,Memory freed
+660,34,CREATED,862.0,3,"C32, C33, C34",4094.5,1.5,Container 34 launched (reset pos 1),✓ YES (3/3),3 now active
+665,32,COMPLETED,1293.0,2,"C33, C34",2801.5,1294.5,Container 32 released resources,N/A,Memory freed
+665,35,CREATED,1293.0,3,"C33, C34, C35",4094.5,1.5,Container 35 launched (reset pos 2),✓ YES (3/3),3 now active
+670,33,COMPLETED,1939.5,2,"C34, C35",2155.0,1941.0,Container 33 released resources,N/A,Memory freed
+670,36,CREATED,1939.5,3,"C34, C35, C36",4094.5,1.5,Container 36 launched (reset pos 3),✓ YES (3/3),3 now active
+720,34,COMPLETED,862.0,2,"C35, C36",3232.5,863.5,Container 34 released resources,N/A,Memory freed
+720,37,CREATED,862.0,3,"C35, C36, C37",4094.5,1.5,Container 37 launched (reset pos 1),✓ YES (3/3),3 now active
+725,35,COMPLETED,1293.0,2,"C36, C37",2801.5,1294.5,Container 35 released resources,N/A,Memory freed
+725,38,CREATED,1293.0,3,"C36, C37, C38",4094.5,1.5,Container 38 launched (reset pos 2),✓ YES (3/3),3 now active
+730,36,COMPLETED,1939.5,2,"C37, C38",2155.0,1941.0,Container 36 released resources,N/A,Memory freed
+730,39,CREATED,1939.5,3,"C37, C38, C39",4094.5,1.5,Container 39 launched (reset pos 3),✓ YES (3/3),3 now active
+780,37,COMPLETED,862.0,2,"C38, C39",3232.5,863.5,Container 37 released resources,N/A,Memory freed
+780,40,CREATED,862.0,3,"C38, C39, C40",4094.5,1.5,Container 40 launched (reset pos 1),✓ YES (3/3),3 now active
+785,38,COMPLETED,1293.0,2,"C39, C40",2801.5,1294.5,Container 38 released resources,N/A,Memory freed
+785,41,CREATED,1293.0,3,"C39, C40, C41",4094.5,1.5,Container 41 launched (reset pos 2),✓ YES (3/3),3 now active
+790,39,COMPLETED,1939.5,2,"C40, C41",2155.0,1941.0,Container 39 released resources,N/A,Memory freed
+790,42,CREATED,1939.5,3,"C40, C41, C42",4094.5,1.5,Container 42 launched (reset pos 3),✓ YES (3/3),3 now active
+840,40,COMPLETED,862.0,2,"C41, C42",3232.5,863.5,Container 40 released resources,N/A,Memory freed
+840,43,CREATED,862.0,3,"C41, C42, C43",4094.5,1.5,Container 43 launched (reset pos 1),✓ YES (3/3),3 now active
+845,41,COMPLETED,1293.0,2,"C42, C43",2801.5,1294.5,Container 41 released resources,N/A,Memory freed
+845,44,CREATED,1293.0,3,"C42, C43, C44",4094.5,1.5,Container 44 launched (reset pos 2),✓ YES (3/3),3 now active
+850,42,COMPLETED,1939.5,2,"C43, C44",2155.0,1941.0,Container 42 released resources,N/A,Memory freed
+850,45,CREATED,1939.5,3,"C43, C44, C45",4094.5,1.5,Container 45 launched (reset pos 3),✓ YES (3/3),3 now active
+900,43,COMPLETED,862.0,2,"C44, C45",3232.5,863.5,Container 43 released resources,N/A,Memory freed
+900,46,CREATED,862.0,3,"C44, C45, C46",4094.5,1.5,Container 46 launched (reset pos 1),✓ YES (3/3),3 now active
+905,44,COMPLETED,1293.0,2,"C45, C46",2801.5,1294.5,Container 44 released resources,N/A,Memory freed
+905,47,CREATED,1293.0,3,"C45, C46, C47",4094.5,1.5,Container 47 launched (reset pos 2),✓ YES (3/3),3 now active
+910,45,COMPLETED,1939.5,2,"C46, C47",2155.0,1941.0,Container 45 released resources,N/A,Memory freed
+910,48,CREATED,1939.5,3,"C46, C47, C48",4094.5,1.5,Container 48 launched (reset pos 3),✓ YES (3/3),3 now active
+960,46,COMPLETED,862.0,2,"C47, C48",3232.5,863.5,Container 46 released resources,N/A,Memory freed
+960,49,CREATED,862.0,3,"C47, C48, C49",4094.5,1.5,Container 49 launched (reset pos 1),✓ YES (3/3),3 now active
+965,47,COMPLETED,1293.0,2,"C48, C49",2801.5,1294.5,Container 47 released resources,N/A,Memory freed
+965,50,CREATED,1293.0,3,"C48, C49, C50",4094.5,1.5,Container 50 launched (reset pos 2),✓ YES (3/3),3 now active
+970,48,COMPLETED,1939.5,2,"C49, C50",2155.0,1941.0,Container 48 released resources,N/A,Memory freed
+970,51,CREATED,1939.5,3,"C49, C50, C51",4094.5,1.5,Container 51 launched (reset pos 3),✓ YES (3/3),3 now active
+1020,49,COMPLETED,862.0,2,"C50, C51",3232.5,863.5,Container 49 released resources,N/A,Memory freed
+1020,52,CREATED,862.0,3,"C50, C51, C52",4094.5,1.5,Container 52 launched (reset pos 1),✓ YES (3/3),3 now active
+1025,50,COMPLETED,1293.0,2,"C51, C52",2801.5,1294.5,Container 50 released resources,N/A,Memory freed
+1025,53,CREATED,1293.0,3,"C51, C52, C53",4094.5,1.5,Container 53 launched (reset pos 2),✓ YES (3/3),3 now active
+1030,51,COMPLETED,1939.5,2,"C52, C53",2155.0,1941.0,Container 51 released resources,N/A,Memory freed
+1030,54,CREATED,1939.5,3,"C52, C53, C54",4094.5,1.5,Container 54 launched (reset pos 3),✓ YES (3/3),3 now active
+1080,52,COMPLETED,862.0,2,"C53, C54",3232.5,863.5,Container 52 released resources,N/A,Memory freed
+1080,55,CREATED,862.0,3,"C53, C54, C55",4094.5,1.5,Container 55 launched (reset pos 1),✓ YES (3/3),3 now active
+1085,53,COMPLETED,1293.0,2,"C54, C55",2801.5,1294.5,Container 53 released resources,N/A,Memory freed
+1085,56,CREATED,1293.0,3,"C54, C55, C56",4094.5,1.5,Container 56 launched (reset pos 2),✓ YES (3/3),3 now active
+1090,54,COMPLETED,1939.5,2,"C55, C56",2155.0,1941.0,Container 54 released resources,N/A,Memory freed
+1090,57,CREATED,1939.5,3,"C55, C56, C57",4094.5,1.5,Container 57 launched (reset pos 3),✓ YES (3/3),3 now active
+1140,55,COMPLETED,862.0,2,"C56, C57",3232.5,863.5,Container 55 released resources,N/A,Memory freed
+1140,58,CREATED,862.0,3,"C56, C57, C58",4094.5,1.5,Container 58 launched (reset pos 1),✓ YES (3/3),3 now active
+1145,56,COMPLETED,1293.0,2,"C57, C58",2801.5,1294.5,Container 56 released resources,N/A,Memory freed
+1145,59,CREATED,1293.0,3,"C57, C58, C59",4094.5,1.5,Container 59 launched (reset pos 2),✓ YES (3/3),3 now active
+1150,57,COMPLETED,1939.5,2,"C58, C59",2155.0,1941.0,Container 57 released resources,N/A,Memory freed
+1150,60,CREATED,1939.5,3,"C58, C59, C60",4094.5,1.5,Container 60 launched (reset pos 3),✓ YES (3/3),3 now active
+1200,58,COMPLETED,862.0,2,"C59, C60",3232.5,863.5,Container 58 released resources,N/A,Memory freed
+1200,61,CREATED,862.0,3,"C59, C60, C61",4094.5,1.5,Container 61 launched (reset pos 1),✓ YES (3/3),3 now active
+1205,59,COMPLETED,1293.0,2,"C60, C61",2801.5,1294.5,Container 59 released resources,N/A,Memory freed
+1205,62,CREATED,1293.0,3,"C60, C61, C62",4094.5,1.5,Container 62 launched (reset pos 2),✓ YES (3/3),3 now active
+1210,60,COMPLETED,1939.5,2,"C61, C62",2155.0,1941.0,Container 60 released resources,N/A,Memory freed
+1210,63,CREATED,1939.5,3,"C61, C62, C63",4094.5,1.5,Container 63 launched (reset pos 3),✓ YES (3/3),3 now active
+1260,61,COMPLETED,862.0,2,"C62, C63",3232.5,863.5,Container 61 released resources,N/A,Memory freed
+1260,64,CREATED,862.0,3,"C62, C63, C64",4094.5,1.5,Container 64 launched (reset pos 1),✓ YES (3/3),3 now active
+1265,62,COMPLETED,1293.0,2,"C63, C64",2801.5,1294.5,Container 62 released resources,N/A,Memory freed
+1265,65,CREATED,1293.0,3,"C63, C64, C65",4094.5,1.5,Container 65 launched (reset pos 2),✓ YES (3/3),3 now active
+1270,63,COMPLETED,1939.5,2,"C64, C65",2155.0,1941.0,Container 63 released resources,N/A,Memory freed
+1270,66,CREATED,1939.5,3,"C64, C65, C66",4094.5,1.5,Container 66 launched (reset pos 3),✓ YES (3/3),3 now active
+1320,64,COMPLETED,862.0,2,"C65, C66",3232.5,863.5,Container 64 released resources,N/A,Memory freed
+1320,67,CREATED,862.0,3,"C65, C66, C67",4094.5,1.5,Container 67 launched (reset pos 1),✓ YES (3/3),3 now active
+1325,65,COMPLETED,1293.0,2,"C66, C67",2801.5,1294.5,Container 65 released resources,N/A,Memory freed
+1325,68,CREATED,1293.0,3,"C66, C67, C68",4094.5,1.5,Container 68 launched (reset pos 2),✓ YES (3/3),3 now active
+1330,66,COMPLETED,1939.5,2,"C67, C68",2155.0,1941.0,Container 66 released resources,N/A,Memory freed
+1330,69,CREATED,1939.5,3,"C67, C68, C69",4094.5,1.5,Container 69 launched (reset pos 3),✓ YES (3/3),3 now active
+1380,67,COMPLETED,862.0,2,"C68, C69",3232.5,863.5,Container 67 released resources,N/A,Memory freed
+1380,70,CREATED,862.0,3,"C68, C69, C70",4094.5,1.5,Container 70 launched (reset pos 1),✓ YES (3/3),3 now active
+1385,68,COMPLETED,1293.0,2,"C69, C70",2801.5,1294.5,Container 68 released resources,N/A,Memory freed
+1385,71,CREATED,1293.0,3,"C69, C70, C71",4094.5,1.5,Container 71 launched (reset pos 2),✓ YES (3/3),3 now active
+1390,69,COMPLETED,1939.5,2,"C70, C71",2155.0,1941.0,Container 69 released resources,N/A,Memory freed
+1390,72,CREATED,1939.5,3,"C70, C71, C72",4094.5,1.5,Container 72 launched (reset pos 3),✓ YES (3/3),3 now active
+1440,70,COMPLETED,862.0,2,"C71, C72",3232.5,863.5,Container 70 released resources,N/A,Memory freed
+1440,73,CREATED,862.0,3,"C71, C72, C73",4094.5,1.5,Container 73 launched (reset pos 1),✓ YES (3/3),3 now active
+1445,71,COMPLETED,1293.0,2,"C72, C73",2801.5,1294.5,Container 71 released resources,N/A,Memory freed
+1445,74,CREATED,1293.0,3,"C72, C73, C74",4094.5,1.5,Container 74 launched (reset pos 2),✓ YES (3/3),3 now active
+1450,72,COMPLETED,1939.5,2,"C73, C74",2155.0,1941.0,Container 72 released resources,N/A,Memory freed
+1450,75,CREATED,1939.5,3,"C73, C74, C75",4094.5,1.5,Container 75 launched (reset pos 3),✓ YES (3/3),3 now active
+1500,73,COMPLETED,862.0,2,"C74, C75",3232.5,863.5,Container 73 released resources,N/A,Memory freed
+1500,76,CREATED,862.0,3,"C74, C75, C76",4094.5,1.5,Container 76 launched (reset pos 1),✓ YES (3/3),3 now active
+1505,74,COMPLETED,1293.0,2,"C75, C76",2801.5,1294.5,Container 74 released resources,N/A,Memory freed
+1505,77,CREATED,1293.0,3,"C75, C76, C77",4094.5,1.5,Container 77 launched (reset pos 2),✓ YES (3/3),3 now active
+1510,75,COMPLETED,1939.5,2,"C76, C77",2155.0,1941.0,Container 75 released resources,N/A,Memory freed
+1510,78,CREATED,1939.5,3,"C76, C77, C78",4094.5,1.5,Container 78 launched (reset pos 3),✓ YES (3/3),3 now active
+1560,76,COMPLETED,862.0,2,"C77, C78",3232.5,863.5,Container 76 released resources,N/A,Memory freed
+1560,79,CREATED,862.0,3,"C77, C78, C79",4094.5,1.5,Container 79 launched (reset pos 1),✓ YES (3/3),3 now active
+1565,77,COMPLETED,1293.0,2,"C78, C79",2801.5,1294.5,Container 77 released resources,N/A,Memory freed
+1565,80,CREATED,1293.0,3,"C78, C79, C80",4094.5,1.5,Container 80 launched (reset pos 2),✓ YES (3/3),3 now active
+1570,78,COMPLETED,1939.5,2,"C79, C80",2155.0,1941.0,Container 78 released resources,N/A,Memory freed
+1570,81,CREATED,1939.5,3,"C79, C80, C81",4094.5,1.5,Container 81 launched (reset pos 3),✓ YES (3/3),3 now active
+1620,79,COMPLETED,862.0,2,"C80, C81",3232.5,863.5,Container 79 released resources,N/A,Memory freed
+1620,82,CREATED,862.0,3,"C80, C81, C82",4094.5,1.5,Container 82 launched (reset pos 1),✓ YES (3/3),3 now active
+1625,80,COMPLETED,1293.0,2,"C81, C82",2801.5,1294.5,Container 80 released resources,N/A,Memory freed
+1625,83,CREATED,1293.0,3,"C81, C82, C83",4094.5,1.5,Container 83 launched (reset pos 2),✓ YES (3/3),3 now active
+1630,81,COMPLETED,1939.5,2,"C82, C83",2155.0,1941.0,Container 81 released resources,N/A,Memory freed
+1630,84,CREATED,1939.5,3,"C82, C83, C84",4094.5,1.5,Container 84 launched (reset pos 3),✓ YES (3/3),3 now active
+1680,82,COMPLETED,862.0,2,"C83, C84",3232.5,863.5,Container 82 released resources,N/A,Memory freed
+1680,85,CREATED,862.0,3,"C83, C84, C85",4094.5,1.5,Container 85 launched (reset pos 1),✓ YES (3/3),3 now active
+1685,83,COMPLETED,1293.0,2,"C84, C85",2801.5,1294.5,Container 83 released resources,N/A,Memory freed
+1685,86,CREATED,1293.0,3,"C84, C85, C86",4094.5,1.5,Container 86 launched (reset pos 2),✓ YES (3/3),3 now active
+1690,84,COMPLETED,1939.5,2,"C85, C86",2155.0,1941.0,Container 84 released resources,N/A,Memory freed
+1690,87,CREATED,1939.5,3,"C85, C86, C87",4094.5,1.5,Container 87 launched (reset pos 3),✓ YES (3/3),3 now active
+1740,85,COMPLETED,862.0,2,"C86, C87",3232.5,863.5,Container 85 released resources,N/A,Memory freed
+1740,88,CREATED,862.0,3,"C86, C87, C88",4094.5,1.5,Container 88 launched (reset pos 1),✓ YES (3/3),3 now active
+1745,86,COMPLETED,1293.0,2,"C87, C88",2801.5,1294.5,Container 86 released resources,N/A,Memory freed
+1745,89,CREATED,1293.0,3,"C87, C88, C89",4094.5,1.5,Container 89 launched (reset pos 2),✓ YES (3/3),3 now active
+1750,87,COMPLETED,1939.5,2,"C88, C89",2155.0,1941.0,Container 87 released resources,N/A,Memory freed
+1750,90,CREATED,1939.5,3,"C88, C89, C90",4094.5,1.5,Container 90 launched (reset pos 3),✓ YES (3/3),3 now active
+1800,88,COMPLETED,862.0,2,"C89, C90",3232.5,863.5,Container 88 released resources,N/A,Memory freed
+1800,91,CREATED,862.0,3,"C89, C90, C91",4094.5,1.5,Container 91 launched (reset pos 1),✓ YES (3/3),3 now active
+1805,89,COMPLETED,1293.0,2,"C90, C91",2801.5,1294.5,Container 89 released resources,N/A,Memory freed
+1805,92,CREATED,1293.0,3,"C90, C91, C92",4094.5,1.5,Container 92 launched (reset pos 2),✓ YES (3/3),3 now active
+1810,90,COMPLETED,1939.5,2,"C91, C92",2155.0,1941.0,Container 90 released resources,N/A,Memory freed
+1810,93,CREATED,1939.5,3,"C91, C92, C93",4094.5,1.5,Container 93 launched (reset pos 3),✓ YES (3/3),3 now active
+1860,91,COMPLETED,862.0,2,"C92, C93",3232.5,863.5,Container 91 released resources,N/A,Memory freed
+1860,94,CREATED,862.0,3,"C92, C93, C94",4094.5,1.5,Container 94 launched (reset pos 1),✓ YES (3/3),3 now active
+1865,92,COMPLETED,1293.0,2,"C93, C94",2801.5,1294.5,Container 92 released resources,N/A,Memory freed
+1865,95,CREATED,1293.0,3,"C93, C94, C95",4094.5,1.5,Container 95 launched (reset pos 2),✓ YES (3/3),3 now active
+1870,93,COMPLETED,1939.5,2,"C94, C95",2155.0,1941.0,Container 93 released resources,N/A,Memory freed
+1870,96,CREATED,1939.5,3,"C94, C95, C96",4094.5,1.5,Container 96 launched (reset pos 3),✓ YES (3/3),3 now active
+1920,94,COMPLETED,862.0,2,"C95, C96",3232.5,863.5,Container 94 released resources,N/A,Memory freed
+1920,97,CREATED,862.0,3,"C95, C96, C97",4094.5,1.5,Container 97 launched (reset pos 1),✓ YES (3/3),3 now active
+1925,95,COMPLETED,1293.0,2,"C96, C97",2801.5,1294.5,Container 95 released resources,N/A,Memory freed
+1925,98,CREATED,1293.0,3,"C96, C97, C98",4094.5,1.5,Container 98 launched (reset pos 2),✓ YES (3/3),3 now active
+1930,96,COMPLETED,1939.5,2,"C97, C98",2155.0,1941.0,Container 96 released resources,N/A,Memory freed
+1930,99,CREATED,1939.5,3,"C97, C98, C99",4094.5,1.5,Container 99 launched (reset pos 3),✓ YES (3/3),3 now active
+1980,97,COMPLETED,862.0,2,"C98, C99",3232.5,863.5,Container 97 released resources,N/A,Memory freed
+1980,100,CREATED,862.0,3,"C98, C99, C100",4094.5,1.5,Container 100 launched (reset pos 1),✓ YES (3/3),3 now active
+1985,98,COMPLETED,1293.0,2,"C99, C100",2801.5,1294.5,Container 98 released resources,N/A,Memory freed
+1990,99,COMPLETED,1939.5,1,C100,862.0,3234.0,Container 99 released resources,N/A,Memory freed
+2040,100,COMPLETED,862.0,0,,0.0,4096.0,Container 100 released resources,N/A,Memory freed

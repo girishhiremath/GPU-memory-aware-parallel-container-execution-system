@@ -1,0 +1,11 @@
+{
+  "config": {
+    "total_gpu_memory_mb": 4096.0,
+    "container_duration_seconds": 60,
+    "step_interval_seconds": 5,
+    "max_concurrent_containers": 3,
+    "memory_multiplier": 1.5,
+    "base_memory_mb": 862.0,
+    "simulation_duration_hours": 1.0
+  }
+}
