@@ -103,6 +103,12 @@ class CSVReporter:
             'cycle_memory': cycle_memory,
         }
 
+    def _get_baseline_time(self):
+        """Get the earliest launch time across all containers for relative time display."""
+        if not self.containers:
+            return 0
+        return min(c.launch_time for c in self.containers.values())
+
     def _get_reset_interval(self):
         """Get the dynamic reset interval. Falls back to calculation if not set."""
         if self.dynamic_reset:
@@ -610,6 +616,8 @@ class CSVReporter:
                 'FAILED': 'Finished with error'
             }
 
+            baseline = self._get_baseline_time()
+
             for cid in sorted(self.containers.keys()):
                 c = self.containers[cid]
                 base_time = c.launch_time
@@ -622,7 +630,7 @@ class CSVReporter:
                     writer.writerow([
                         cid,
                         state,
-                        f"{timestamp:.2f}",
+                        f"{timestamp - baseline:.2f}",
                         f"{duration:.2f}",
                         f"{c.memory_mb:.1f}",
                         overall_status,
@@ -1221,6 +1229,8 @@ class CSVReporter:
             event_order = {'LAUNCH': 0, 'QUEUED': 1, 'COMPLETION': 2}
             all_events.sort(key=lambda e: (e['time'], event_order.get(e['type'], 3)))
 
+            baseline = self._get_baseline_time()
+
             # Timeline header
             writer.writerow([
                 'Time (s)',
@@ -1292,7 +1302,7 @@ class CSVReporter:
                 active_ids_str = ', '.join([f'C{cid}' for cid in active_ids]) if active_ids else '(empty)'
 
                 writer.writerow([
-                    f"{event_time:.1f}",
+                    f"{event_time - baseline:.1f}",
                     event_type,
                     f"C{container_id}",
                     action,
@@ -1384,6 +1394,7 @@ class CSVReporter:
 
             # Sort containers by launch time
             sorted_containers = sorted(self.containers.values(), key=lambda c: c.launch_time)
+            baseline = self._get_baseline_time()
 
             for c in sorted_containers:
                 if c.completion_time is None:
@@ -1398,7 +1409,7 @@ class CSVReporter:
                 for other in self.containers.values():
                     if other.container_id == c.container_id:
                         continue
-                    if other.completion_time is None:
+                    if other.completion_time is None or c.completion_time is None:
                         continue
                     # Check if time ranges overlap
                     if c.launch_time < other.completion_time and other.launch_time < c.completion_time:
@@ -1416,8 +1427,8 @@ class CSVReporter:
                     c.container_id,
                     f"{c.memory_mb:.1f}",
                     f'{reset_pos}/{cycle}',
-                    f"{c.launch_time:.2f}",
-                    f"{c.completion_time:.2f}" if c.completion_time else 'N/A',
+                    f"{c.launch_time - baseline:.2f}",
+                    f"{c.completion_time - baseline:.2f}" if c.completion_time else 'N/A',
                     f"{duration:.2f}" if is_complete else 'N/A',
                     status,
                     len(c.state_transitions),
@@ -1476,7 +1487,7 @@ class CSVReporter:
                     event_desc = 'COMPLETION'
 
                 writer.writerow([
-                    f"{event_time:.2f}",
+                    f"{event_time - baseline:.2f}",
                     len(active_ids),
                     ', '.join([f'C{cid}' for cid in active_ids]),
                     f"{active_memory:.1f}",
@@ -1512,7 +1523,7 @@ class CSVReporter:
                     writer.writerow([
                         c.container_id,
                         state,
-                        f"{ts:.2f}",
+                        f"{ts - baseline:.2f}",
                         f"{time_since_launch:.2f}",
                         state_descriptions.get(state, 'Unknown')
                     ])
