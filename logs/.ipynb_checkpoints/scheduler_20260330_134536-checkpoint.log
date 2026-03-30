@@ -1,0 +1,73 @@
+2026-03-30 13:45:36,951 - log_setup - INFO - Logging initialized. Log file: /home/ec2-user/SageMaker/working-schedular/GPU-memory-aware-parallel-container-execution-system/logs/scheduler_20260330_134536.log
+2026-03-30 13:45:36,951 - log_setup - INFO - Scheduler logging initialized
+2026-03-30 13:45:36,952 - config_loader - INFO - Loaded configuration from: config.ini
+2026-03-30 13:45:36,952 - log_setup - INFO - ================================================================================
+2026-03-30 13:45:36,952 - log_setup - INFO - CONFIGURATION SUMMARY
+2026-03-30 13:45:36,952 - log_setup - INFO - ================================================================================
+2026-03-30 13:45:36,952 - log_setup - INFO - 
+2026-03-30 13:45:36,953 - log_setup - INFO - [SCHEDULER]
+2026-03-30 13:45:36,953 - log_setup - INFO -   GPU Memory: 4096.0MB
+2026-03-30 13:45:36,953 - log_setup - INFO -   Container Duration: 60s
+2026-03-30 13:45:36,953 - log_setup - INFO -   Step Interval: 5s
+2026-03-30 13:45:36,953 - log_setup - INFO -   Max Concurrent: 3
+2026-03-30 13:45:36,953 - log_setup - INFO -   Memory Multiplier: 1.5x
+2026-03-30 13:45:36,953 - log_setup - INFO -   Base Memory: 125.0MB
+2026-03-30 13:45:36,953 - log_setup - INFO -   Simulation Duration: 1.0h
+2026-03-30 13:45:36,953 - log_setup - INFO - 
+2026-03-30 13:45:36,953 - log_setup - INFO - [REPORTS]
+2026-03-30 13:45:36,953 - log_setup - INFO -   Directory: reports
+2026-03-30 13:45:36,953 - log_setup - INFO - 
+2026-03-30 13:45:36,953 - log_setup - INFO - [ADVANCED]
+2026-03-30 13:45:36,953 - log_setup - INFO -   OOM Retry Count: 3
+2026-03-30 13:45:36,953 - log_setup - INFO -   Watchdog Poll Interval: 30s
+2026-03-30 13:45:36,954 - log_setup - INFO - 
+2026-03-30 13:45:36,954 - log_setup - INFO - ================================================================================
+2026-03-30 13:45:36,954 - __main__ - INFO - Starting scheduler with config from config.ini...
+2026-03-30 13:45:36,954 - __main__ - INFO - Log file: /home/ec2-user/SageMaker/working-schedular/GPU-memory-aware-parallel-container-execution-system/logs/scheduler_20260330_134536.log
+2026-03-30 13:45:36,954 - memory_manager - INFO - PyTorch GPU available - worker processes will handle GPU allocation
+2026-03-30 13:45:36,954 - config_loader - INFO - Loaded configuration from: config.ini
+2026-03-30 13:45:36,955 - watchdog - INFO - Watchdog initialized: poll=30s, grace=60s
+2026-03-30 13:45:36,955 - __main__ - INFO - ================================================================================
+2026-03-30 13:45:36,955 - __main__ - INFO - DYNAMIC RESET CONFIGURATION (computed at startup)
+2026-03-30 13:45:36,955 - __main__ - INFO -   Base Memory: 125.0 MB
+2026-03-30 13:45:36,955 - __main__ - INFO -   Memory Multiplier: 1.5x
+2026-03-30 13:45:36,955 - __main__ - INFO -   Total GPU Memory: 4096.0 MB
+2026-03-30 13:45:36,955 - __main__ - INFO -   Dynamic Reset Point: Container 9
+2026-03-30 13:45:36,955 - __main__ - INFO -     → Would require 3203.6 MB
+2026-03-30 13:45:36,955 - __main__ - INFO -     → Exceeds 4096.0 MB GPU
+2026-03-30 13:45:36,956 - __main__ - INFO -   Max Simultaneous Containers: 3
+2026-03-30 13:45:36,956 - __main__ - INFO -   Cycle Memory Usage: 593.8 MB (14.50% of GPU)
+2026-03-30 13:45:36,956 - __main__ - INFO -   Reset Formula: container_index % 3 + 1
+2026-03-30 13:45:36,956 - __main__ - INFO - ================================================================================
+2026-03-30 13:45:36,956 - __main__ - INFO - Scheduler initialized
+2026-03-30 13:45:36,956 - __main__ - INFO - Config: SchedulerConfig(total_gpu_memory_mb=4096.0, container_duration_seconds=60, step_interval_seconds=5, max_concurrent_containers=3, memory_multiplier=1.5, base_memory_mb=125.0, simulation_duration_hours=1.0, worker_script='worker/worker.py')
+2026-03-30 13:45:36,956 - state_tracker - INFO - System state: initializing → running
+2026-03-30 13:45:36,956 - watchdog - INFO - Watchdog started
+2026-03-30 13:45:36,956 - __main__ - INFO - Scheduler started
+2026-03-30 13:45:36,957 - __main__ - DEBUG - Container 1: cycle_position=0/9, memory=125.0MB (dynamic reset)
+2026-03-30 13:45:36,957 - memory_manager - DEBUG - Tracked allocation 125.0MB for container 1 (Block 1) - GPU allocation done by worker
+2026-03-30 13:45:36,958 - state_tracker - INFO - Container 1 CREATED: 125.0MB, 60s
+2026-03-30 13:45:36,958 - container_runner - INFO - Starting container 1: python /home/ec2-user/SageMaker/working-schedular/GPU-memory-aware-parallel-container-execution-system/worker/worker.py
+2026-03-30 13:45:36,958 - __main__ - INFO - Launched container 1: type 1/9, 125.0MB
+2026-03-30 13:45:36,958 - state_tracker - INFO - [Starting] Container 1: created → starting
+2026-03-30 13:45:36,958 - state_tracker - INFO - [Allocating memory] Container 1: starting → allocating_memory
+2026-03-30 13:45:36,959 - state_tracker - INFO - [Running] Container 1: allocating_memory → running
+2026-03-30 13:45:36,959 - __main__ - INFO - Container 1 started
+2026-03-30 13:45:41,962 - __main__ - DEBUG - Container 2: cycle_position=1/9, memory=187.5MB (dynamic reset)
+2026-03-30 13:45:41,962 - memory_manager - DEBUG - Tracked allocation 187.5MB for container 2 (Block 2) - GPU allocation done by worker
+2026-03-30 13:45:41,964 - state_tracker - INFO - Container 2 CREATED: 187.5MB, 60s
+2026-03-30 13:45:41,964 - container_runner - INFO - Starting container 2: python /home/ec2-user/SageMaker/working-schedular/GPU-memory-aware-parallel-container-execution-system/worker/worker.py
+2026-03-30 13:45:41,964 - __main__ - INFO - Launched container 2: type 2/9, 187.5MB
+2026-03-30 13:45:41,965 - state_tracker - INFO - [Starting] Container 2: created → starting
+2026-03-30 13:45:41,965 - state_tracker - INFO - [Allocating memory] Container 2: starting → allocating_memory
+2026-03-30 13:45:41,965 - state_tracker - INFO - [Running] Container 2: allocating_memory → running
+2026-03-30 13:45:41,965 - __main__ - INFO - Container 2 started
+2026-03-30 13:45:46,972 - __main__ - DEBUG - Container 3: cycle_position=2/9, memory=281.25MB (dynamic reset)
+2026-03-30 13:45:46,972 - memory_manager - DEBUG - Tracked allocation 281.25MB for container 3 (Block 3) - GPU allocation done by worker
+2026-03-30 13:45:46,973 - state_tracker - INFO - Container 3 CREATED: 281.25MB, 60s
+2026-03-30 13:45:46,974 - container_runner - INFO - Starting container 3: python /home/ec2-user/SageMaker/working-schedular/GPU-memory-aware-parallel-container-execution-system/worker/worker.py
+2026-03-30 13:45:46,974 - __main__ - INFO - Launched container 3: type 3/9, 281.25MB
+2026-03-30 13:45:46,974 - state_tracker - INFO - [Starting] Container 3: created → starting
+2026-03-30 13:45:46,974 - state_tracker - INFO - [Allocating memory] Container 3: starting → allocating_memory
+2026-03-30 13:45:46,974 - state_tracker - INFO - [Running] Container 3: allocating_memory → running
+2026-03-30 13:45:46,974 - __main__ - INFO - Container 3 started

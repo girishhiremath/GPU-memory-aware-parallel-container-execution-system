@@ -1,0 +1,309 @@
+CHRONOLOGICAL EVENT TIMELINE
+Complete scheduling events with container state transitions and memory status
+Generated:,2026-03-30 14:45:42
+
+CONFIGURATION
+Base Memory:,125.0 MB
+Memory Multiplier:,1.5x
+Total GPU Memory:,4096.0 MB
+Container Duration:,60s
+Max Concurrent:,3
+Reset Interval (cycle):,3
+
+Time (s),Event,Container,Action,Active Containers,Memory Used (MB),Memory %,Free Memory (MB),Notes
+1774878337.0,LAUNCH,C1,"Launch C1 (type 1/3, 125 MB)",C1,125.0,3.05%,3971.0,C1 starts
+1774878342.0,LAUNCH,C2,"Launch C2 (type 2/3, 188 MB)","C1, C2",312.5,7.63%,3783.5,"C2 starts, 2 now active"
+1774878347.0,LAUNCH,C3,"Launch C3 (type 3/3, 281 MB)","C1, C2, C3",593.8,14.50%,3502.2,"C3 starts, 3 now active"
+1774878400.8,COMPLETION,C1,C1 completes (free 125 MB),"C2, C3",468.8,11.44%,3627.2,"Free C1, 2 still active"
+1774878402.0,LAUNCH,C4,"Launch C4 (type 1/3, 422 MB)","C2, C3, C4",890.6,21.74%,3205.4,"C4 starts, 3 now active"
+1774878405.6,COMPLETION,C2,C2 completes (free 188 MB),"C3, C4",703.1,17.17%,3392.9,"Free C2, 2 still active"
+1774878407.0,LAUNCH,C5,"Launch C5 (type 2/3, 633 MB)","C3, C4, C5",1335.9,32.62%,2760.1,"C5 starts, 3 now active"
+1774878410.6,COMPLETION,C3,C3 completes (free 281 MB),"C4, C5",1054.7,25.75%,3041.3,"Free C3, 2 still active"
+1774878412.0,LAUNCH,C6,"Launch C6 (type 3/3, 949 MB)","C4, C5, C6",2003.9,48.92%,2092.1,"C6 starts, 3 now active"
+1774878465.7,COMPLETION,C4,C4 completes (free 422 MB),"C5, C6",1582.0,38.62%,2514.0,"Free C4, 2 still active"
+1774878467.1,LAUNCH,C7,"Launch C7 (type 1/3, 1424 MB)","C5, C6, C7",3005.9,73.39%,1090.1,"C7 starts, 3 now active"
+1774878470.8,COMPLETION,C5,C5 completes (free 633 MB),"C6, C7",2373.0,57.94%,1723.0,"Free C5, 2 still active"
+1774878472.1,QUEUED,C8,"C8 queued (WAITING_MEMORY, needs 2136 MB)","C6, C7",2373.0,57.94%,1723.0,C8 blocked - WAITING_MEMORY (free 1723 < needed 2136)
+1774878475.8,COMPLETION,C6,C6 completes (free 949 MB),C7,1423.8,34.76%,2672.2,"Free C6, 1 still active"
+1774878475.8,LAUNCH,C8,"Launch C8 (type 2/3, 2136 MB)","C7, C8",3559.6,86.90%,536.4,"C8 starts, 2 now active"
+1774878477.1,QUEUED,C9,"C9 queued (WAITING_MEMORY, needs 3204 MB)","C7, C8",3559.6,86.90%,536.4,C9 blocked - WAITING_MEMORY (free 536 < needed 3204)
+1774878530.8,COMPLETION,C7,C7 completes (free 1424 MB),C8,2135.7,52.14%,1960.3,"Free C7, 1 still active"
+1774878539.6,COMPLETION,C8,C8 completes (free 2136 MB),(empty),0.0,0.00%,4096.0,"Free C8, was queued for 1 event(s)"
+1774878539.6,LAUNCH,C9,"Launch C9 (type 3/3, 3204 MB)",C9,3203.6,78.21%,892.4,C9 starts
+1774878542.2,LAUNCH,C10,"Launch C10 (type 1/3, 125 MB)","C9, C10",3328.6,81.26%,767.4,"C10 starts, 2 now active"
+1774878547.2,LAUNCH,C11,"Launch C11 (type 2/3, 188 MB)","C9, C10, C11",3516.1,85.84%,579.9,"C11 starts, 3 now active"
+1774878603.4,COMPLETION,C9,C9 completes (free 3204 MB),"C10, C11",312.5,7.63%,3783.5,"Free C9, was queued for 1 event(s), 2 still active"
+1774878605.9,COMPLETION,C10,C10 completes (free 125 MB),C11,187.5,4.58%,3908.5,"Free C10, 1 still active"
+1774878607.2,LAUNCH,C12,"Launch C12 (type 3/3, 281 MB)","C11, C12",468.8,11.44%,3627.2,"C12 starts, 2 now active"
+1774878610.9,COMPLETION,C11,C11 completes (free 188 MB),C12,281.2,6.87%,3814.8,"Free C11, 1 still active"
+1774878612.2,LAUNCH,C13,"Launch C13 (type 1/3, 422 MB)","C12, C13",703.1,17.17%,3392.9,"C13 starts, 2 now active"
+1774878617.2,LAUNCH,C14,"Launch C14 (type 2/3, 633 MB)","C12, C13, C14",1335.9,32.62%,2760.1,"C14 starts, 3 now active"
+1774878670.9,COMPLETION,C12,C12 completes (free 281 MB),"C13, C14",1054.7,25.75%,3041.3,"Free C12, 2 still active"
+1774878672.3,LAUNCH,C15,"Launch C15 (type 3/3, 949 MB)","C13, C14, C15",2003.9,48.92%,2092.1,"C15 starts, 3 now active"
+1774878675.9,COMPLETION,C13,C13 completes (free 422 MB),"C14, C15",1582.0,38.62%,2514.0,"Free C13, 2 still active"
+1774878677.3,LAUNCH,C16,"Launch C16 (type 1/3, 1424 MB)","C14, C15, C16",3005.9,73.39%,1090.1,"C16 starts, 3 now active"
+1774878680.9,COMPLETION,C14,C14 completes (free 633 MB),"C15, C16",2373.0,57.94%,1723.0,"Free C14, 2 still active"
+1774878682.3,QUEUED,C17,"C17 queued (WAITING_MEMORY, needs 2136 MB)","C15, C16",2373.0,57.94%,1723.0,C17 blocked - WAITING_MEMORY (free 1723 < needed 2136)
+1774878735.9,COMPLETION,C15,C15 completes (free 949 MB),C16,1423.8,34.76%,2672.2,"Free C15, 1 still active"
+1774878735.9,LAUNCH,C17,"Launch C17 (type 2/3, 2136 MB)","C16, C17",3559.6,86.90%,536.4,"C17 starts, 2 now active"
+1774878737.4,QUEUED,C18,"C18 queued (WAITING_MEMORY, needs 3204 MB)","C16, C17",3559.6,86.90%,536.4,C18 blocked - WAITING_MEMORY (free 536 < needed 3204)
+1774878741.0,COMPLETION,C16,C16 completes (free 1424 MB),C17,2135.7,52.14%,1960.3,"Free C16, 1 still active"
+1774878799.8,COMPLETION,C17,C17 completes (free 2136 MB),(empty),0.0,0.00%,4096.0,"Free C17, was queued for 1 event(s)"
+1774878799.8,LAUNCH,C18,"Launch C18 (type 3/3, 3204 MB)",C18,3203.6,78.21%,892.4,C18 starts
+1774878802.4,LAUNCH,C19,"Launch C19 (type 1/3, 125 MB)","C18, C19",3328.6,81.26%,767.4,"C19 starts, 2 now active"
+1774878807.4,LAUNCH,C20,"Launch C20 (type 2/3, 188 MB)","C18, C19, C20",3516.1,85.84%,579.9,"C20 starts, 3 now active"
+1774878863.4,COMPLETION,C18,C18 completes (free 3204 MB),"C19, C20",312.5,7.63%,3783.5,"Free C18, was queued for 1 event(s), 2 still active"
+1774878866.2,COMPLETION,C19,C19 completes (free 125 MB),C20,187.5,4.58%,3908.5,"Free C19, 1 still active"
+1774878867.5,LAUNCH,C21,"Launch C21 (type 3/3, 281 MB)","C20, C21",468.8,11.44%,3627.2,"C21 starts, 2 now active"
+1774878871.1,COMPLETION,C20,C20 completes (free 188 MB),C21,281.2,6.87%,3814.8,"Free C20, 1 still active"
+1774878872.5,LAUNCH,C22,"Launch C22 (type 1/3, 422 MB)","C21, C22",703.1,17.17%,3392.9,"C22 starts, 2 now active"
+1774878877.5,LAUNCH,C23,"Launch C23 (type 2/3, 633 MB)","C21, C22, C23",1335.9,32.62%,2760.1,"C23 starts, 3 now active"
+1774878931.2,COMPLETION,C21,C21 completes (free 281 MB),"C22, C23",1054.7,25.75%,3041.3,"Free C21, 2 still active"
+1774878932.5,LAUNCH,C24,"Launch C24 (type 3/3, 949 MB)","C22, C23, C24",2003.9,48.92%,2092.1,"C24 starts, 3 now active"
+1774878936.2,COMPLETION,C22,C22 completes (free 422 MB),"C23, C24",1582.0,38.62%,2514.0,"Free C22, 2 still active"
+1774878937.6,LAUNCH,C25,"Launch C25 (type 1/3, 1424 MB)","C23, C24, C25",3005.9,73.39%,1090.1,"C25 starts, 3 now active"
+1774878941.2,COMPLETION,C23,C23 completes (free 633 MB),"C24, C25",2373.0,57.94%,1723.0,"Free C23, 2 still active"
+1774878942.6,QUEUED,C26,"C26 queued (WAITING_MEMORY, needs 2136 MB)","C24, C25",2373.0,57.94%,1723.0,C26 blocked - WAITING_MEMORY (free 1723 < needed 2136)
+1774878996.3,COMPLETION,C24,C24 completes (free 949 MB),C25,1423.8,34.76%,2672.2,"Free C24, 1 still active"
+1774878996.3,LAUNCH,C26,"Launch C26 (type 2/3, 2136 MB)","C25, C26",3559.6,86.90%,536.4,"C26 starts, 2 now active"
+1774878997.6,QUEUED,C27,"C27 queued (WAITING_MEMORY, needs 3204 MB)","C25, C26",3559.6,86.90%,536.4,C27 blocked - WAITING_MEMORY (free 536 < needed 3204)
+1774879001.3,COMPLETION,C25,C25 completes (free 1424 MB),C26,2135.7,52.14%,1960.3,"Free C25, 1 still active"
+1774879059.9,COMPLETION,C26,C26 completes (free 2136 MB),(empty),0.0,0.00%,4096.0,"Free C26, was queued for 1 event(s)"
+1774879059.9,LAUNCH,C27,"Launch C27 (type 3/3, 3204 MB)",C27,3203.6,78.21%,892.4,C27 starts
+1774879062.7,LAUNCH,C28,"Launch C28 (type 1/3, 125 MB)","C27, C28",3328.6,81.26%,767.4,"C28 starts, 2 now active"
+1774879067.7,LAUNCH,C29,"Launch C29 (type 2/3, 188 MB)","C27, C28, C29",3516.1,85.84%,579.9,"C29 starts, 3 now active"
+1774879123.7,COMPLETION,C27,C27 completes (free 3204 MB),"C28, C29",312.5,7.63%,3783.5,"Free C27, was queued for 1 event(s), 2 still active"
+1774879126.4,COMPLETION,C28,C28 completes (free 125 MB),C29,187.5,4.58%,3908.5,"Free C28, 1 still active"
+1774879127.8,LAUNCH,C30,"Launch C30 (type 3/3, 281 MB)","C29, C30",468.8,11.44%,3627.2,"C30 starts, 2 now active"
+1774879131.4,COMPLETION,C29,C29 completes (free 188 MB),C30,281.2,6.87%,3814.8,"Free C29, 1 still active"
+1774879132.8,LAUNCH,C31,"Launch C31 (type 1/3, 422 MB)","C30, C31",703.1,17.17%,3392.9,"C31 starts, 2 now active"
+1774879137.8,LAUNCH,C32,"Launch C32 (type 2/3, 633 MB)","C30, C31, C32",1335.9,32.62%,2760.1,"C32 starts, 3 now active"
+1774879191.4,COMPLETION,C30,C30 completes (free 281 MB),"C31, C32",1054.7,25.75%,3041.3,"Free C30, 2 still active"
+1774879192.8,LAUNCH,C33,"Launch C33 (type 3/3, 949 MB)","C31, C32, C33",2003.9,48.92%,2092.1,"C33 starts, 3 now active"
+1774879196.5,COMPLETION,C31,C31 completes (free 422 MB),"C32, C33",1582.0,38.62%,2514.0,"Free C31, 2 still active"
+1774879197.9,LAUNCH,C34,"Launch C34 (type 1/3, 1424 MB)","C32, C33, C34",3005.9,73.39%,1090.1,"C34 starts, 3 now active"
+1774879201.4,COMPLETION,C32,C32 completes (free 633 MB),"C33, C34",2373.0,57.94%,1723.0,"Free C32, 2 still active"
+1774879202.9,QUEUED,C35,"C35 queued (WAITING_MEMORY, needs 2136 MB)","C33, C34",2373.0,57.94%,1723.0,C35 blocked - WAITING_MEMORY (free 1723 < needed 2136)
+1774879256.5,COMPLETION,C33,C33 completes (free 949 MB),C34,1423.8,34.76%,2672.2,"Free C33, 1 still active"
+1774879256.5,LAUNCH,C35,"Launch C35 (type 2/3, 2136 MB)","C34, C35",3559.6,86.90%,536.4,"C35 starts, 2 now active"
+1774879257.9,QUEUED,C36,"C36 queued (WAITING_MEMORY, needs 3204 MB)","C34, C35",3559.6,86.90%,536.4,C36 blocked - WAITING_MEMORY (free 536 < needed 3204)
+1774879261.6,COMPLETION,C34,C34 completes (free 1424 MB),C35,2135.7,52.14%,1960.3,"Free C34, 1 still active"
+1774879320.3,COMPLETION,C35,C35 completes (free 2136 MB),(empty),0.0,0.00%,4096.0,"Free C35, was queued for 1 event(s)"
+1774879320.3,LAUNCH,C36,"Launch C36 (type 3/3, 3204 MB)",C36,3203.6,78.21%,892.4,C36 starts
+1774879323.0,LAUNCH,C37,"Launch C37 (type 1/3, 125 MB)","C36, C37",3328.6,81.26%,767.4,"C37 starts, 2 now active"
+1774879328.0,LAUNCH,C38,"Launch C38 (type 2/3, 188 MB)","C36, C37, C38",3516.1,85.84%,579.9,"C38 starts, 3 now active"
+1774879384.1,COMPLETION,C36,C36 completes (free 3204 MB),"C37, C38",312.5,7.63%,3783.5,"Free C36, was queued for 1 event(s), 2 still active"
+1774879386.9,COMPLETION,C37,C37 completes (free 125 MB),C38,187.5,4.58%,3908.5,"Free C37, 1 still active"
+1774879388.1,LAUNCH,C39,"Launch C39 (type 3/3, 281 MB)","C38, C39",468.8,11.44%,3627.2,"C39 starts, 2 now active"
+1774879391.8,COMPLETION,C38,C38 completes (free 188 MB),C39,281.2,6.87%,3814.8,"Free C38, 1 still active"
+1774879393.1,LAUNCH,C40,"Launch C40 (type 1/3, 422 MB)","C39, C40",703.1,17.17%,3392.9,"C40 starts, 2 now active"
+1774879398.1,LAUNCH,C41,"Launch C41 (type 2/3, 633 MB)","C39, C40, C41",1335.9,32.62%,2760.1,"C41 starts, 3 now active"
+1774879451.8,COMPLETION,C39,C39 completes (free 281 MB),"C40, C41",1054.7,25.75%,3041.3,"Free C39, 2 still active"
+1774879453.2,LAUNCH,C42,"Launch C42 (type 3/3, 949 MB)","C40, C41, C42",2003.9,48.92%,2092.1,"C42 starts, 3 now active"
+1774879456.7,COMPLETION,C40,C40 completes (free 422 MB),"C41, C42",1582.0,38.62%,2514.0,"Free C40, 2 still active"
+1774879458.2,LAUNCH,C43,"Launch C43 (type 1/3, 1424 MB)","C41, C42, C43",3005.9,73.39%,1090.1,"C43 starts, 3 now active"
+1774879461.8,COMPLETION,C41,C41 completes (free 633 MB),"C42, C43",2373.0,57.94%,1723.0,"Free C41, 2 still active"
+1774879463.2,QUEUED,C44,"C44 queued (WAITING_MEMORY, needs 2136 MB)","C42, C43",2373.0,57.94%,1723.0,C44 blocked - WAITING_MEMORY (free 1723 < needed 2136)
+1774879516.9,COMPLETION,C42,C42 completes (free 949 MB),C43,1423.8,34.76%,2672.2,"Free C42, 1 still active"
+1774879516.9,LAUNCH,C44,"Launch C44 (type 2/3, 2136 MB)","C43, C44",3559.6,86.90%,536.4,"C44 starts, 2 now active"
+1774879518.3,QUEUED,C45,"C45 queued (WAITING_MEMORY, needs 3204 MB)","C43, C44",3559.6,86.90%,536.4,C45 blocked - WAITING_MEMORY (free 536 < needed 3204)
+1774879521.9,COMPLETION,C43,C43 completes (free 1424 MB),C44,2135.7,52.14%,1960.3,"Free C43, 1 still active"
+1774879580.7,COMPLETION,C44,C44 completes (free 2136 MB),(empty),0.0,0.00%,4096.0,"Free C44, was queued for 1 event(s)"
+1774879580.7,LAUNCH,C45,"Launch C45 (type 3/3, 3204 MB)",C45,3203.6,78.21%,892.4,C45 starts
+1774879583.3,LAUNCH,C46,"Launch C46 (type 1/3, 125 MB)","C45, C46",3328.6,81.26%,767.4,"C46 starts, 2 now active"
+1774879588.4,LAUNCH,C47,"Launch C47 (type 2/3, 188 MB)","C45, C46, C47",3516.1,85.84%,579.9,"C47 starts, 3 now active"
+1774879644.5,COMPLETION,C45,C45 completes (free 3204 MB),"C46, C47",312.5,7.63%,3783.5,"Free C45, was queued for 1 event(s), 2 still active"
+1774879647.1,COMPLETION,C46,C46 completes (free 125 MB),C47,187.5,4.58%,3908.5,"Free C46, 1 still active"
+1774879648.4,LAUNCH,C48,"Launch C48 (type 3/3, 281 MB)","C47, C48",468.8,11.44%,3627.2,"C48 starts, 2 now active"
+1774879652.1,COMPLETION,C47,C47 completes (free 188 MB),C48,281.2,6.87%,3814.8,"Free C47, 1 still active"
+1774879653.4,LAUNCH,C49,"Launch C49 (type 1/3, 422 MB)","C48, C49",703.1,17.17%,3392.9,"C49 starts, 2 now active"
+1774879658.4,LAUNCH,C50,"Launch C50 (type 2/3, 633 MB)","C48, C49, C50",1335.9,32.62%,2760.1,"C50 starts, 3 now active"
+1774879712.3,COMPLETION,C48,C48 completes (free 281 MB),"C49, C50",1054.7,25.75%,3041.3,"Free C48, 2 still active"
+1774879713.5,LAUNCH,C51,"Launch C51 (type 3/3, 949 MB)","C49, C50, C51",2003.9,48.92%,2092.1,"C51 starts, 3 now active"
+1774879717.1,COMPLETION,C49,C49 completes (free 422 MB),"C50, C51",1582.0,38.62%,2514.0,"Free C49, 2 still active"
+1774879718.5,LAUNCH,C52,"Launch C52 (type 1/3, 1424 MB)","C50, C51, C52",3005.9,73.39%,1090.1,"C52 starts, 3 now active"
+1774879722.2,COMPLETION,C50,C50 completes (free 633 MB),"C51, C52",2373.0,57.94%,1723.0,"Free C50, 2 still active"
+1774879723.5,QUEUED,C53,"C53 queued (WAITING_MEMORY, needs 2136 MB)","C51, C52",2373.0,57.94%,1723.0,C53 blocked - WAITING_MEMORY (free 1723 < needed 2136)
+1774879777.5,COMPLETION,C51,C51 completes (free 949 MB),C52,1423.8,34.76%,2672.2,"Free C51, 1 still active"
+1774879777.5,LAUNCH,C53,"Launch C53 (type 2/3, 2136 MB)","C52, C53",3559.6,86.90%,536.4,"C53 starts, 2 now active"
+1774879778.6,QUEUED,C54,"C54 queued (WAITING_MEMORY, needs 3204 MB)","C52, C53",3559.6,86.90%,536.4,C54 blocked - WAITING_MEMORY (free 536 < needed 3204)
+1774879782.3,COMPLETION,C52,C52 completes (free 1424 MB),C53,2135.7,52.14%,1960.3,"Free C52, 1 still active"
+1774879841.4,COMPLETION,C53,C53 completes (free 2136 MB),(empty),0.0,0.00%,4096.0,"Free C53, was queued for 1 event(s)"
+1774879841.4,LAUNCH,C54,"Launch C54 (type 3/3, 3204 MB)",C54,3203.6,78.21%,892.4,C54 starts
+1774879843.7,LAUNCH,C55,"Launch C55 (type 1/3, 125 MB)","C54, C55",3328.6,81.26%,767.4,"C55 starts, 2 now active"
+1774879848.7,LAUNCH,C56,"Launch C56 (type 2/3, 188 MB)","C54, C55, C56",3516.1,85.84%,579.9,"C56 starts, 3 now active"
+1774879905.2,COMPLETION,C54,C54 completes (free 3204 MB),"C55, C56",312.5,7.63%,3783.5,"Free C54, was queued for 1 event(s), 2 still active"
+1774879907.4,COMPLETION,C55,C55 completes (free 125 MB),C56,187.5,4.58%,3908.5,"Free C55, 1 still active"
+1774879908.8,LAUNCH,C57,"Launch C57 (type 3/3, 281 MB)","C56, C57",468.8,11.44%,3627.2,"C57 starts, 2 now active"
+1774879912.4,COMPLETION,C56,C56 completes (free 188 MB),C57,281.2,6.87%,3814.8,"Free C56, 1 still active"
+1774879913.8,LAUNCH,C58,"Launch C58 (type 1/3, 422 MB)","C57, C58",703.1,17.17%,3392.9,"C58 starts, 2 now active"
+1774879918.8,LAUNCH,C59,"Launch C59 (type 2/3, 633 MB)","C57, C58, C59",1335.9,32.62%,2760.1,"C59 starts, 3 now active"
+1774879972.4,COMPLETION,C57,C57 completes (free 281 MB),"C58, C59",1054.7,25.75%,3041.3,"Free C57, 2 still active"
+1774879973.9,LAUNCH,C60,"Launch C60 (type 3/3, 949 MB)","C58, C59, C60",2003.9,48.92%,2092.1,"C60 starts, 3 now active"
+1774879977.5,COMPLETION,C58,C58 completes (free 422 MB),"C59, C60",1582.0,38.62%,2514.0,"Free C58, 2 still active"
+1774879978.9,LAUNCH,C61,"Launch C61 (type 1/3, 1424 MB)","C59, C60, C61",3005.9,73.39%,1090.1,"C61 starts, 3 now active"
+1774879982.5,COMPLETION,C59,C59 completes (free 633 MB),"C60, C61",2373.0,57.94%,1723.0,"Free C59, 2 still active"
+1774879983.9,QUEUED,C62,"C62 queued (WAITING_MEMORY, needs 2136 MB)","C60, C61",2373.0,57.94%,1723.0,C62 blocked - WAITING_MEMORY (free 1723 < needed 2136)
+1774880037.5,COMPLETION,C60,C60 completes (free 949 MB),C61,1423.8,34.76%,2672.2,"Free C60, 1 still active"
+1774880037.5,LAUNCH,C62,"Launch C62 (type 2/3, 2136 MB)","C61, C62",3559.6,86.90%,536.4,"C62 starts, 2 now active"
+1774880039.0,QUEUED,C63,"C63 queued (WAITING_MEMORY, needs 3204 MB)","C61, C62",3559.6,86.90%,536.4,C63 blocked - WAITING_MEMORY (free 536 < needed 3204)
+1774880042.7,COMPLETION,C61,C61 completes (free 1424 MB),C62,2135.7,52.14%,1960.3,"Free C61, 1 still active"
+1774880101.2,COMPLETION,C62,C62 completes (free 2136 MB),(empty),0.0,0.00%,4096.0,"Free C62, was queued for 1 event(s)"
+1774880101.2,LAUNCH,C63,"Launch C63 (type 3/3, 3204 MB)",C63,3203.6,78.21%,892.4,C63 starts
+1774880104.1,LAUNCH,C64,"Launch C64 (type 1/3, 125 MB)","C63, C64",3328.6,81.26%,767.4,"C64 starts, 2 now active"
+1774880109.1,LAUNCH,C65,"Launch C65 (type 2/3, 188 MB)","C63, C64, C65",3516.1,85.84%,579.9,"C65 starts, 3 now active"
+1774880165.1,COMPLETION,C63,C63 completes (free 3204 MB),"C64, C65",312.5,7.63%,3783.5,"Free C63, was queued for 1 event(s), 2 still active"
+1774880167.7,COMPLETION,C64,C64 completes (free 125 MB),C65,187.5,4.58%,3908.5,"Free C64, 1 still active"
+1774880169.2,LAUNCH,C66,"Launch C66 (type 3/3, 281 MB)","C65, C66",468.8,11.44%,3627.2,"C66 starts, 2 now active"
+1774880172.9,COMPLETION,C65,C65 completes (free 188 MB),C66,281.2,6.87%,3814.8,"Free C65, 1 still active"
+1774880174.2,LAUNCH,C67,"Launch C67 (type 1/3, 422 MB)","C66, C67",703.1,17.17%,3392.9,"C67 starts, 2 now active"
+1774880179.2,LAUNCH,C68,"Launch C68 (type 2/3, 633 MB)","C66, C67, C68",1335.9,32.62%,2760.1,"C68 starts, 3 now active"
+1774880232.9,COMPLETION,C66,C66 completes (free 281 MB),"C67, C68",1054.7,25.75%,3041.3,"Free C66, 2 still active"
+1774880234.3,LAUNCH,C69,"Launch C69 (type 3/3, 949 MB)","C67, C68, C69",2003.9,48.92%,2092.1,"C69 starts, 3 now active"
+1774880237.8,COMPLETION,C67,C67 completes (free 422 MB),"C68, C69",1582.0,38.62%,2514.0,"Free C67, 2 still active"
+1774880239.3,LAUNCH,C70,"Launch C70 (type 1/3, 1424 MB)","C68, C69, C70",3005.9,73.39%,1090.1,"C70 starts, 3 now active"
+1774880243.0,COMPLETION,C68,C68 completes (free 633 MB),"C69, C70",2373.0,57.94%,1723.0,"Free C68, 2 still active"
+1774880244.3,QUEUED,C71,"C71 queued (WAITING_MEMORY, needs 2136 MB)","C69, C70",2373.0,57.94%,1723.0,C71 blocked - WAITING_MEMORY (free 1723 < needed 2136)
+1774880298.0,COMPLETION,C69,C69 completes (free 949 MB),C70,1423.8,34.76%,2672.2,"Free C69, 1 still active"
+1774880298.0,LAUNCH,C71,"Launch C71 (type 2/3, 2136 MB)","C70, C71",3559.6,86.90%,536.4,"C71 starts, 2 now active"
+1774880299.4,QUEUED,C72,"C72 queued (WAITING_MEMORY, needs 3204 MB)","C70, C71",3559.6,86.90%,536.4,C72 blocked - WAITING_MEMORY (free 536 < needed 3204)
+1774880303.1,COMPLETION,C70,C70 completes (free 1424 MB),C71,2135.7,52.14%,1960.3,"Free C70, 1 still active"
+1774880361.7,COMPLETION,C71,C71 completes (free 2136 MB),(empty),0.0,0.00%,4096.0,"Free C71, was queued for 1 event(s)"
+1774880361.7,LAUNCH,C72,"Launch C72 (type 3/3, 3204 MB)",C72,3203.6,78.21%,892.4,C72 starts
+1774880364.5,LAUNCH,C73,"Launch C73 (type 1/3, 125 MB)","C72, C73",3328.6,81.26%,767.4,"C73 starts, 2 now active"
+1774880369.5,LAUNCH,C74,"Launch C74 (type 2/3, 188 MB)","C72, C73, C74",3516.1,85.84%,579.9,"C74 starts, 3 now active"
+1774880425.5,COMPLETION,C72,C72 completes (free 3204 MB),"C73, C74",312.5,7.63%,3783.5,"Free C72, was queued for 1 event(s), 2 still active"
+1774880428.3,COMPLETION,C73,C73 completes (free 125 MB),C74,187.5,4.58%,3908.5,"Free C73, 1 still active"
+1774880429.6,LAUNCH,C75,"Launch C75 (type 3/3, 281 MB)","C74, C75",468.8,11.44%,3627.2,"C75 starts, 2 now active"
+1774880433.2,COMPLETION,C74,C74 completes (free 188 MB),C75,281.2,6.87%,3814.8,"Free C74, 1 still active"
+1774880434.6,LAUNCH,C76,"Launch C76 (type 1/3, 422 MB)","C75, C76",703.1,17.17%,3392.9,"C76 starts, 2 now active"
+1774880439.6,LAUNCH,C77,"Launch C77 (type 2/3, 633 MB)","C75, C76, C77",1335.9,32.62%,2760.1,"C77 starts, 3 now active"
+1774880493.3,COMPLETION,C75,C75 completes (free 281 MB),"C76, C77",1054.7,25.75%,3041.3,"Free C75, 2 still active"
+1774880494.7,LAUNCH,C78,"Launch C78 (type 3/3, 949 MB)","C76, C77, C78",2003.9,48.92%,2092.1,"C78 starts, 3 now active"
+1774880498.3,COMPLETION,C76,C76 completes (free 422 MB),"C77, C78",1582.0,38.62%,2514.0,"Free C76, 2 still active"
+1774880499.7,LAUNCH,C79,"Launch C79 (type 1/3, 1424 MB)","C77, C78, C79",3005.9,73.39%,1090.1,"C79 starts, 3 now active"
+1774880503.4,COMPLETION,C77,C77 completes (free 633 MB),"C78, C79",2373.0,57.94%,1723.0,"Free C77, 2 still active"
+1774880504.7,QUEUED,C80,"C80 queued (WAITING_MEMORY, needs 2136 MB)","C78, C79",2373.0,57.94%,1723.0,C80 blocked - WAITING_MEMORY (free 1723 < needed 2136)
+1774880558.5,COMPLETION,C78,C78 completes (free 949 MB),C79,1423.8,34.76%,2672.2,"Free C78, 1 still active"
+1774880558.5,LAUNCH,C80,"Launch C80 (type 2/3, 2136 MB)","C79, C80",3559.6,86.90%,536.4,"C80 starts, 2 now active"
+1774880559.8,QUEUED,C81,"C81 queued (WAITING_MEMORY, needs 3204 MB)","C79, C80",3559.6,86.90%,536.4,C81 blocked - WAITING_MEMORY (free 536 < needed 3204)
+1774880563.4,COMPLETION,C79,C79 completes (free 1424 MB),C80,2135.7,52.14%,1960.3,"Free C79, 1 still active"
+1774880622.1,COMPLETION,C80,C80 completes (free 2136 MB),(empty),0.0,0.00%,4096.0,"Free C80, was queued for 1 event(s)"
+1774880622.1,LAUNCH,C81,"Launch C81 (type 3/3, 3204 MB)",C81,3203.6,78.21%,892.4,C81 starts
+1774880624.9,LAUNCH,C82,"Launch C82 (type 1/3, 125 MB)","C81, C82",3328.6,81.26%,767.4,"C82 starts, 2 now active"
+1774880629.9,LAUNCH,C83,"Launch C83 (type 2/3, 188 MB)","C81, C82, C83",3516.1,85.84%,579.9,"C83 starts, 3 now active"
+1774880685.9,COMPLETION,C81,C81 completes (free 3204 MB),"C82, C83",312.5,7.63%,3783.5,"Free C81, was queued for 1 event(s), 2 still active"
+1774880688.6,COMPLETION,C82,C82 completes (free 125 MB),C83,187.5,4.58%,3908.5,"Free C82, 1 still active"
+1774880689.9,LAUNCH,C84,"Launch C84 (type 3/3, 281 MB)","C83, C84",468.8,11.44%,3627.2,"C84 starts, 2 now active"
+1774880693.5,COMPLETION,C83,C83 completes (free 188 MB),C84,281.2,6.87%,3814.8,"Free C83, 1 still active"
+1774880694.9,LAUNCH,C85,"Launch C85 (type 1/3, 422 MB)","C84, C85",703.1,17.17%,3392.9,"C85 starts, 2 now active"
+1774880699.9,LAUNCH,C86,"Launch C86 (type 2/3, 633 MB)","C84, C85, C86",1335.9,32.62%,2760.1,"C86 starts, 3 now active"
+1774880753.6,COMPLETION,C84,C84 completes (free 281 MB),"C85, C86",1054.7,25.75%,3041.3,"Free C84, 2 still active"
+1774880754.9,LAUNCH,C87,"Launch C87 (type 3/3, 949 MB)","C85, C86, C87",2003.9,48.92%,2092.1,"C87 starts, 3 now active"
+1774880758.6,COMPLETION,C85,C85 completes (free 422 MB),"C86, C87",1582.0,38.62%,2514.0,"Free C85, 2 still active"
+1774880760.0,LAUNCH,C88,"Launch C88 (type 1/3, 1424 MB)","C86, C87, C88",3005.9,73.39%,1090.1,"C88 starts, 3 now active"
+1774880763.6,COMPLETION,C86,C86 completes (free 633 MB),"C87, C88",2373.0,57.94%,1723.0,"Free C86, 2 still active"
+1774880765.0,QUEUED,C89,"C89 queued (WAITING_MEMORY, needs 2136 MB)","C87, C88",2373.0,57.94%,1723.0,C89 blocked - WAITING_MEMORY (free 1723 < needed 2136)
+1774880818.7,COMPLETION,C87,C87 completes (free 949 MB),C88,1423.8,34.76%,2672.2,"Free C87, 1 still active"
+1774880818.7,LAUNCH,C89,"Launch C89 (type 2/3, 2136 MB)","C88, C89",3559.6,86.90%,536.4,"C89 starts, 2 now active"
+1774880820.0,QUEUED,C90,"C90 queued (WAITING_MEMORY, needs 3204 MB)","C88, C89",3559.6,86.90%,536.4,C90 blocked - WAITING_MEMORY (free 536 < needed 3204)
+1774880823.7,COMPLETION,C88,C88 completes (free 1424 MB),C89,2135.7,52.14%,1960.3,"Free C88, 1 still active"
+1774880882.5,COMPLETION,C89,C89 completes (free 2136 MB),(empty),0.0,0.00%,4096.0,"Free C89, was queued for 1 event(s)"
+1774880882.5,LAUNCH,C90,"Launch C90 (type 3/3, 3204 MB)",C90,3203.6,78.21%,892.4,C90 starts
+1774880885.0,LAUNCH,C91,"Launch C91 (type 1/3, 125 MB)","C90, C91",3328.6,81.26%,767.4,"C91 starts, 2 now active"
+1774880890.0,LAUNCH,C92,"Launch C92 (type 2/3, 188 MB)","C90, C91, C92",3516.1,85.84%,579.9,"C92 starts, 3 now active"
+1774880946.2,COMPLETION,C90,C90 completes (free 3204 MB),"C91, C92",312.5,7.63%,3783.5,"Free C90, was queued for 1 event(s), 2 still active"
+1774880948.7,COMPLETION,C91,C91 completes (free 125 MB),C92,187.5,4.58%,3908.5,"Free C91, 1 still active"
+1774880950.1,LAUNCH,C93,"Launch C93 (type 3/3, 281 MB)","C92, C93",468.8,11.44%,3627.2,"C93 starts, 2 now active"
+1774880953.8,COMPLETION,C92,C92 completes (free 188 MB),C93,281.2,6.87%,3814.8,"Free C92, 1 still active"
+1774880955.1,LAUNCH,C94,"Launch C94 (type 1/3, 422 MB)","C93, C94",703.1,17.17%,3392.9,"C94 starts, 2 now active"
+1774880960.1,LAUNCH,C95,"Launch C95 (type 2/3, 633 MB)","C93, C94, C95",1335.9,32.62%,2760.1,"C95 starts, 3 now active"
+1774881013.8,COMPLETION,C93,C93 completes (free 281 MB),"C94, C95",1054.7,25.75%,3041.3,"Free C93, 2 still active"
+1774881015.1,LAUNCH,C96,"Launch C96 (type 3/3, 949 MB)","C94, C95, C96",2003.9,48.92%,2092.1,"C96 starts, 3 now active"
+1774881018.9,COMPLETION,C94,C94 completes (free 422 MB),"C95, C96",1582.0,38.62%,2514.0,"Free C94, 2 still active"
+1774881020.1,LAUNCH,C97,"Launch C97 (type 1/3, 1424 MB)","C95, C96, C97",3005.9,73.39%,1090.1,"C97 starts, 3 now active"
+1774881023.8,COMPLETION,C95,C95 completes (free 633 MB),"C96, C97",2373.0,57.94%,1723.0,"Free C95, 2 still active"
+1774881025.1,QUEUED,C98,"C98 queued (WAITING_MEMORY, needs 2136 MB)","C96, C97",2373.0,57.94%,1723.0,C98 blocked - WAITING_MEMORY (free 1723 < needed 2136)
+1774881078.8,COMPLETION,C96,C96 completes (free 949 MB),C97,1423.8,34.76%,2672.2,"Free C96, 1 still active"
+1774881078.8,LAUNCH,C98,"Launch C98 (type 2/3, 2136 MB)","C97, C98",3559.6,86.90%,536.4,"C98 starts, 2 now active"
+1774881080.1,QUEUED,C99,"C99 queued (WAITING_MEMORY, needs 3204 MB)","C97, C98",3559.6,86.90%,536.4,C99 blocked - WAITING_MEMORY (free 536 < needed 3204)
+1774881083.9,COMPLETION,C97,C97 completes (free 1424 MB),C98,2135.7,52.14%,1960.3,"Free C97, 1 still active"
+1774881142.6,COMPLETION,C98,C98 completes (free 2136 MB),(empty),0.0,0.00%,4096.0,"Free C98, was queued for 1 event(s)"
+1774881142.6,LAUNCH,C99,"Launch C99 (type 3/3, 3204 MB)",C99,3203.6,78.21%,892.4,C99 starts
+1774881145.2,LAUNCH,C100,"Launch C100 (type 1/3, 125 MB)","C99, C100",3328.6,81.26%,767.4,"C100 starts, 2 now active"
+1774881150.2,LAUNCH,C101,"Launch C101 (type 2/3, 188 MB)","C99, C100, C101",3516.1,85.84%,579.9,"C101 starts, 3 now active"
+1774881206.5,COMPLETION,C99,C99 completes (free 3204 MB),"C100, C101",312.5,7.63%,3783.5,"Free C99, was queued for 1 event(s), 2 still active"
+1774881208.8,COMPLETION,C100,C100 completes (free 125 MB),C101,187.5,4.58%,3908.5,"Free C100, 1 still active"
+1774881210.2,LAUNCH,C102,"Launch C102 (type 3/3, 281 MB)","C101, C102",468.8,11.44%,3627.2,"C102 starts, 2 now active"
+1774881213.8,COMPLETION,C101,C101 completes (free 188 MB),C102,281.2,6.87%,3814.8,"Free C101, 1 still active"
+1774881215.2,LAUNCH,C103,"Launch C103 (type 1/3, 422 MB)","C102, C103",703.1,17.17%,3392.9,"C103 starts, 2 now active"
+1774881220.2,LAUNCH,C104,"Launch C104 (type 2/3, 633 MB)","C102, C103, C104",1335.9,32.62%,2760.1,"C104 starts, 3 now active"
+1774881273.8,COMPLETION,C102,C102 completes (free 281 MB),"C103, C104",1054.7,25.75%,3041.3,"Free C102, 2 still active"
+1774881275.2,LAUNCH,C105,"Launch C105 (type 3/3, 949 MB)","C103, C104, C105",2003.9,48.92%,2092.1,"C105 starts, 3 now active"
+1774881278.9,COMPLETION,C103,C103 completes (free 422 MB),"C104, C105",1582.0,38.62%,2514.0,"Free C103, 2 still active"
+1774881280.3,LAUNCH,C106,"Launch C106 (type 1/3, 1424 MB)","C104, C105, C106",3005.9,73.39%,1090.1,"C106 starts, 3 now active"
+1774881283.9,COMPLETION,C104,C104 completes (free 633 MB),"C105, C106",2373.0,57.94%,1723.0,"Free C104, 2 still active"
+1774881285.3,QUEUED,C107,"C107 queued (WAITING_MEMORY, needs 2136 MB)","C105, C106",2373.0,57.94%,1723.0,C107 blocked - WAITING_MEMORY (free 1723 < needed 2136)
+1774881339.1,COMPLETION,C105,C105 completes (free 949 MB),C106,1423.8,34.76%,2672.2,"Free C105, 1 still active"
+1774881339.1,LAUNCH,C107,"Launch C107 (type 2/3, 2136 MB)","C106, C107",3559.6,86.90%,536.4,"C107 starts, 2 now active"
+1774881340.3,QUEUED,C108,"C108 queued (WAITING_MEMORY, needs 3204 MB)","C106, C107",3559.6,86.90%,536.4,C108 blocked - WAITING_MEMORY (free 536 < needed 3204)
+1774881344.1,COMPLETION,C106,C106 completes (free 1424 MB),C107,2135.7,52.14%,1960.3,"Free C106, 1 still active"
+1774881402.9,COMPLETION,C107,C107 completes (free 2136 MB),(empty),0.0,0.00%,4096.0,"Free C107, was queued for 1 event(s)"
+1774881402.9,LAUNCH,C108,"Launch C108 (type 3/3, 3204 MB)",C108,3203.6,78.21%,892.4,C108 starts
+1774881405.3,LAUNCH,C109,"Launch C109 (type 1/3, 125 MB)","C108, C109",3328.6,81.26%,767.4,"C109 starts, 2 now active"
+1774881410.3,LAUNCH,C110,"Launch C110 (type 2/3, 188 MB)","C108, C109, C110",3516.1,85.84%,579.9,"C110 starts, 3 now active"
+1774881466.8,COMPLETION,C108,C108 completes (free 3204 MB),"C109, C110",312.5,7.63%,3783.5,"Free C108, was queued for 1 event(s), 2 still active"
+1774881469.1,COMPLETION,C109,C109 completes (free 125 MB),C110,187.5,4.58%,3908.5,"Free C109, 1 still active"
+1774881470.4,LAUNCH,C111,"Launch C111 (type 3/3, 281 MB)","C110, C111",468.8,11.44%,3627.2,"C111 starts, 2 now active"
+1774881474.1,COMPLETION,C110,C110 completes (free 188 MB),C111,281.2,6.87%,3814.8,"Free C110, 1 still active"
+1774881475.4,LAUNCH,C112,"Launch C112 (type 1/3, 422 MB)","C111, C112",703.1,17.17%,3392.9,"C112 starts, 2 now active"
+1774881480.4,LAUNCH,C113,"Launch C113 (type 2/3, 633 MB)","C111, C112, C113",1335.9,32.62%,2760.1,"C113 starts, 3 now active"
+1774881534.2,COMPLETION,C111,C111 completes (free 281 MB),"C112, C113",1054.7,25.75%,3041.3,"Free C111, 2 still active"
+1774881535.5,LAUNCH,C114,"Launch C114 (type 3/3, 949 MB)","C112, C113, C114",2003.9,48.92%,2092.1,"C114 starts, 3 now active"
+1774881539.1,COMPLETION,C112,C112 completes (free 422 MB),"C113, C114",1582.0,38.62%,2514.0,"Free C112, 2 still active"
+1774881540.5,LAUNCH,C115,"Launch C115 (type 1/3, 1424 MB)","C113, C114, C115",3005.9,73.39%,1090.1,"C115 starts, 3 now active"
+1774881544.3,COMPLETION,C113,C113 completes (free 633 MB),"C114, C115",2373.0,57.94%,1723.0,"Free C113, 2 still active"
+1774881545.5,QUEUED,C116,"C116 queued (WAITING_MEMORY, needs 2136 MB)","C114, C115",2373.0,57.94%,1723.0,C116 blocked - WAITING_MEMORY (free 1723 < needed 2136)
+1774881599.1,COMPLETION,C114,C114 completes (free 949 MB),C115,1423.8,34.76%,2672.2,"Free C114, 1 still active"
+1774881599.1,LAUNCH,C116,"Launch C116 (type 2/3, 2136 MB)","C115, C116",3559.6,86.90%,536.4,"C116 starts, 2 now active"
+1774881600.5,QUEUED,C117,"C117 queued (WAITING_MEMORY, needs 3204 MB)","C115, C116",3559.6,86.90%,536.4,C117 blocked - WAITING_MEMORY (free 536 < needed 3204)
+1774881604.3,COMPLETION,C115,C115 completes (free 1424 MB),C116,2135.7,52.14%,1960.3,"Free C115, 1 still active"
+1774881662.9,COMPLETION,C116,C116 completes (free 2136 MB),(empty),0.0,0.00%,4096.0,"Free C116, was queued for 1 event(s)"
+1774881662.9,LAUNCH,C117,"Launch C117 (type 3/3, 3204 MB)",C117,3203.6,78.21%,892.4,C117 starts
+1774881665.6,LAUNCH,C118,"Launch C118 (type 1/3, 125 MB)","C117, C118",3328.6,81.26%,767.4,"C118 starts, 2 now active"
+1774881670.6,LAUNCH,C119,"Launch C119 (type 2/3, 188 MB)","C117, C118, C119",3516.1,85.84%,579.9,"C119 starts, 3 now active"
+1774881726.7,COMPLETION,C117,C117 completes (free 3204 MB),"C118, C119",312.5,7.63%,3783.5,"Free C117, was queued for 1 event(s), 2 still active"
+1774881729.2,COMPLETION,C118,C118 completes (free 125 MB),C119,187.5,4.58%,3908.5,"Free C118, 1 still active"
+1774881730.6,LAUNCH,C120,"Launch C120 (type 3/3, 281 MB)","C119, C120",468.8,11.44%,3627.2,"C120 starts, 2 now active"
+1774881734.3,COMPLETION,C119,C119 completes (free 188 MB),C120,281.2,6.87%,3814.8,"Free C119, 1 still active"
+1774881735.6,LAUNCH,C121,"Launch C121 (type 1/3, 422 MB)","C120, C121",703.1,17.17%,3392.9,"C121 starts, 2 now active"
+1774881740.6,LAUNCH,C122,"Launch C122 (type 2/3, 633 MB)","C120, C121, C122",1335.9,32.62%,2760.1,"C122 starts, 3 now active"
+1774881794.3,COMPLETION,C120,C120 completes (free 281 MB),"C121, C122",1054.7,25.75%,3041.3,"Free C120, 2 still active"
+1774881795.7,LAUNCH,C123,"Launch C123 (type 3/3, 949 MB)","C121, C122, C123",2003.9,48.92%,2092.1,"C123 starts, 3 now active"
+1774881799.3,COMPLETION,C121,C121 completes (free 422 MB),"C122, C123",1582.0,38.62%,2514.0,"Free C121, 2 still active"
+1774881800.7,LAUNCH,C124,"Launch C124 (type 1/3, 1424 MB)","C122, C123, C124",3005.9,73.39%,1090.1,"C124 starts, 3 now active"
+1774881804.5,COMPLETION,C122,C122 completes (free 633 MB),"C123, C124",2373.0,57.94%,1723.0,"Free C122, 2 still active"
+1774881805.7,QUEUED,C125,"C125 queued (WAITING_MEMORY, needs 2136 MB)","C123, C124",2373.0,57.94%,1723.0,C125 blocked - WAITING_MEMORY (free 1723 < needed 2136)
+1774881859.4,COMPLETION,C123,C123 completes (free 949 MB),C124,1423.8,34.76%,2672.2,"Free C123, 1 still active"
+1774881859.4,LAUNCH,C125,"Launch C125 (type 2/3, 2136 MB)","C124, C125",3559.6,86.90%,536.4,"C125 starts, 2 now active"
+1774881860.7,QUEUED,C126,"C126 queued (WAITING_MEMORY, needs 3204 MB)","C124, C125",3559.6,86.90%,536.4,C126 blocked - WAITING_MEMORY (free 536 < needed 3204)
+1774881864.5,COMPLETION,C124,C124 completes (free 1424 MB),C125,2135.7,52.14%,1960.3,"Free C124, 1 still active"
+1774881923.2,COMPLETION,C125,C125 completes (free 2136 MB),(empty),0.0,0.00%,4096.0,"Free C125, was queued for 1 event(s)"
+1774881923.2,LAUNCH,C126,"Launch C126 (type 3/3, 3204 MB)",C126,3203.6,78.21%,892.4,C126 starts
+1774881925.8,LAUNCH,C127,"Launch C127 (type 1/3, 125 MB)","C126, C127",3328.6,81.26%,767.4,"C127 starts, 2 now active"
+1774881930.8,LAUNCH,C128,"Launch C128 (type 2/3, 188 MB)","C126, C127, C128",3516.1,85.84%,579.9,"C128 starts, 3 now active"
+
+TIMELINE SUMMARY
+Metric,Value,Unit
+Total Events,281,count
+Container Launches,128,count
+Container Completions,125,count
+Queue Events,28,count
+Timeline Start,1774878337.0,seconds
+Timeline End,1774881930.8,seconds
+Total Duration,3593.8,seconds
+Average Event Interval,12.79,seconds
+
+QUEUE ANALYSIS (from timeline)
+WAITING_MEMORY Events,28,count
+WAITING_SLOT Events,0,count

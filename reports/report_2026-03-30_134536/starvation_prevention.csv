@@ -1,0 +1,32 @@
+PART 3 - STARVATION PREVENTION ANALYSIS
+Comparing three memory cap policy approaches
+Configuration:
+  Base Memory: 125.0 MB
+  Multiplier: 1.5
+  Total GPU Memory: 4096.0 MB
+
+Approach,Description,Max Containers,Max Parallel,Starvation?,Throughput/24h,Recommendation
+Sliding Window,"Exponential growth continues, parallelism drops",9,Drops 3→0,Yes,~4,NOT RECOMMENDED ✗
+Dynamic Reset (cycle=3),Reset when next > GPU (ACTUAL),∞,3,No,4320,RECOMMENDED ✓
+Reset Every 4,Reset after C4 back to C1 size,432+,Varies 1-3,No,288,Acceptable
+Capped at 2048,Cap individual container max at 2048 MB,288+,Drops to 1-2,No,288,Not optimal
+
+RECOMMENDATION: Dynamic Reset (cycle=3) — computed at startup
+"Rationale: Maintains constant-parallelism cycling, adapts to any base_memory, prevents starvation"
+Formula: memory = base × (multiplier ^ ((n-1) % 3))
+
+Container Number,No Reset (MB),Dynamic (cycle=3) (MB),Reset Every 4 (MB),Capped at 2GB (MB)
+1,125,125,125,125
+2,188,188,188,188
+3,281,281,281,281
+4,422,125,422,422
+5,633,188,125,633
+6,949,281,188,949
+7,1424,125,281,1424
+8,2136,188,422,2048
+9,3204,281,125,2048
+10,4805,125,188,2048
+11,7208,188,281,2048
+12,10812,281,422,2048
+13,16218,125,125,2048
+14,24327,188,188,2048

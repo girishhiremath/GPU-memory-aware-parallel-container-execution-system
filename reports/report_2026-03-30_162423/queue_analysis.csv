@@ -1,0 +1,62 @@
+Ready Queue Analysis - DYNAMIC REPORT
+Generated: 2026-03-30 17:24:28
+
+QUEUE SUMMARY (ACTUAL DATA)
+Total Queue Events:,18
+WAITING_MEMORY Events:,18
+WAITING_SLOT Events:,0
+
+Unique Containers Queued:,18
+
+MEMORY PROFILE (ACTUAL QUEUE DATA)
+Total Memory Queued (MB):,43789.39
+Average Memory per Queue Event (MB):,2432.74
+Maximum Queued Memory (MB):,2919.29
+Minimum Queued Memory (MB):,1946.20
+
+QUEUE EVENT TIMELINE
+Sequence,Container ID,Type,Memory (MB),Reason,Timestamp
+1,14,type 2/3,1946.20,WAITING_MEMORY,16:28:48
+2,15,type 3/3,2919.29,WAITING_MEMORY,16:28:53
+3,29,type 2/3,1946.20,WAITING_MEMORY,16:34:29
+4,30,type 3/3,2919.29,WAITING_MEMORY,16:35:24
+5,44,type 2/3,1946.20,WAITING_MEMORY,16:40:59
+6,45,type 3/3,2919.29,WAITING_MEMORY,16:41:54
+7,59,type 2/3,1946.20,WAITING_MEMORY,16:47:30
+8,60,type 3/3,2919.29,WAITING_MEMORY,16:48:25
+9,74,type 2/3,1946.20,WAITING_MEMORY,16:54:00
+10,75,type 3/3,2919.29,WAITING_MEMORY,16:54:55
+11,89,type 2/3,1946.20,WAITING_MEMORY,17:00:30
+12,90,type 3/3,2919.29,WAITING_MEMORY,17:01:25
+13,104,type 2/3,1946.20,WAITING_MEMORY,17:07:01
+14,105,type 3/3,2919.29,WAITING_MEMORY,17:07:56
+15,119,type 2/3,1946.20,WAITING_MEMORY,17:13:31
+16,120,type 3/3,2919.29,WAITING_MEMORY,17:14:26
+17,134,type 2/3,1946.20,WAITING_MEMORY,17:20:01
+18,135,type 3/3,2919.29,WAITING_MEMORY,17:20:56
+
+QUEUE REASON BREAKDOWN
+WAITING_MEMORY Events:
+  Container,14,at,16:28:48,- Memory needed:,1946.20 MB
+  Container,15,at,16:28:53,- Memory needed:,2919.29 MB
+  Container,29,at,16:34:29,- Memory needed:,1946.20 MB
+  Container,30,at,16:35:24,- Memory needed:,2919.29 MB
+  Container,44,at,16:40:59,- Memory needed:,1946.20 MB
+  Container,45,at,16:41:54,- Memory needed:,2919.29 MB
+  Container,59,at,16:47:30,- Memory needed:,1946.20 MB
+  Container,60,at,16:48:25,- Memory needed:,2919.29 MB
+  Container,74,at,16:54:00,- Memory needed:,1946.20 MB
+  Container,75,at,16:54:55,- Memory needed:,2919.29 MB
+  Container,89,at,17:00:30,- Memory needed:,1946.20 MB
+  Container,90,at,17:01:25,- Memory needed:,2919.29 MB
+  Container,104,at,17:07:01,- Memory needed:,1946.20 MB
+  Container,105,at,17:07:56,- Memory needed:,2919.29 MB
+  Container,119,at,17:13:31,- Memory needed:,1946.20 MB
+  Container,120,at,17:14:26,- Memory needed:,2919.29 MB
+  Container,134,at,17:20:01,- Memory needed:,1946.20 MB
+  Container,135,at,17:20:56,- Memory needed:,2919.29 MB
+
+DYNAMIC INSIGHTS
+Primary Bottleneck:,MEMORY
+Queue Fairness:,FIFO (First-In-First-Out) - all containers eventually launch
+Container Distribution:,18 unique containers queued during execution
