@@ -187,7 +187,7 @@ class GPUMemoryWorker:
         CRITICAL FIX: Don't create new tensors during workload!
         This causes memory fragmentation and excessive allocation
         """
-        logger.info(f"🔗 → ⚙️ RUNNING: Starting {self.duration_sec}s workload")
+        logger.info(f"RUNNING: Starting {self.duration_sec}s workload")
         self._report_lifecycle_event(LifecycleState.RUNNING, "Starting workload")
 
         elapsed = 0
@@ -215,7 +215,7 @@ class GPUMemoryWorker:
 
                 # Log progress and report every 10 seconds
                 if elapsed % 10 == 0 and elapsed > 0:
-                    logger.info(f"⚙️  Working: {elapsed}s / {self.duration_sec}s")
+                    logger.info(f"Working: {elapsed}s / {self.duration_sec}s")
                     self._report_lifecycle_event(
                         LifecycleState.RUNNING,
                         f"Running: {elapsed}s / {self.duration_sec}s"
@@ -241,7 +241,7 @@ class GPUMemoryWorker:
         Release all GPU memory before exit, logged with timestamp
         CRITICAL: Ensure complete memory cleanup for SageMaker
         """
-        logger.info("🔓 Releasing GPU memory (AGGRESSIVE cleanup)...")
+        logger.info("Releasing GPU memory (AGGRESSIVE cleanup)...")
         self._report_lifecycle_event(LifecycleState.RELEASING_MEMORY, "Releasing GPU memory")
 
         try:

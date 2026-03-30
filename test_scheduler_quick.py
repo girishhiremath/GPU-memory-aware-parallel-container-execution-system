@@ -22,7 +22,6 @@ def test_quick_5min():
         max_concurrent_containers=3,           # Part 1 spec
         memory_multiplier=1.5,
         simulation_duration_hours=0.0833,      # 5 minutes
-        memory_multiplier_reset_interval=3     # Part 2.3 spec
     )
 
     print(f"Configuration:")
@@ -30,7 +29,7 @@ def test_quick_5min():
     print(f"  Container Duration: {config.container_duration_seconds}s")
     print(f"  Simulation: {config.simulation_duration_hours*60:.1f} minutes")
     print(f"  Max Parallel: {config.max_concurrent_containers}")
-    print(f"  Reset Interval: {config.memory_multiplier_reset_interval} containers")
+    print(f"  Reset Interval: Dynamic (computed at startup)")
     print(f"  Expected Containers: ~30 (5 min ÷ 10s × 3 parallel)")
     print()
 
@@ -66,7 +65,6 @@ def test_quick_1hour():
         max_concurrent_containers=3,
         memory_multiplier=1.5,
         simulation_duration_hours=1.0,
-        memory_multiplier_reset_interval=3
     )
 
     print(f"Configuration:")
@@ -74,7 +72,7 @@ def test_quick_1hour():
     print(f"  Container Duration: {config.container_duration_seconds}s")
     print(f"  Simulation: {config.simulation_duration_hours} hour")
     print(f"  Max Parallel: {config.max_concurrent_containers}")
-    print(f"  Reset Interval: {config.memory_multiplier_reset_interval} containers")
+    print(f"  Reset Interval: Dynamic (computed at startup)")
     print(f"  Expected Containers: ~180 (60 min ÷ 1 min × 3 parallel)")
     print()
 

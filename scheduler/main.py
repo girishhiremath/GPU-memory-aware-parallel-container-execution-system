@@ -21,6 +21,9 @@ if __name__ == "__main__":
     from container_runner import ContainerRunner, ContainerRunConfig
     from csv_reporter import CSVReporter
     from watchdog import GPUWatchdog
+    from log_setup import setup_logging, log_config_summary, log_dynamic_reset_config
+    from log_setup import log_container_launch, log_container_queued, log_container_from_queue
+    from log_setup import log_container_completed, log_system_event
     # Import config loader
     sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     from config_loader import ConfigLoader
@@ -28,6 +31,9 @@ else:
     from .memory_manager import MemoryManager
     from .state_tracker import StateTracker, ContainerState, SystemState
     from .container_runner import ContainerRunner, ContainerRunConfig
+    from .log_setup import setup_logging, log_config_summary, log_dynamic_reset_config
+    from .log_setup import log_container_launch, log_container_queued, log_container_from_queue
+    from .log_setup import log_container_completed, log_system_event
     from .csv_reporter import CSVReporter
     from .watchdog import GPUWatchdog
     # Import config loader
@@ -52,13 +58,12 @@ class SchedulerConfig:
     - simulation_duration_hours=0.1 (6 minutes total)
     """
     total_gpu_memory_mb: float = 4096          # Total GPU memory available (MB)
-    container_duration_seconds: int = 10       # How long each container runs (REDUCED from 600)
-    step_interval_seconds: int = 5             # How often scheduler checks (REDUCED from 30)
-    max_concurrent_containers: int = 2         # Max containers running at once (REDUCED from 3)
+    container_duration_seconds: int = 600      # How long each container runs (10 minutes)
+    step_interval_seconds: int = 5             # How often scheduler checks
+    max_concurrent_containers: int = 3         # Max containers running at once
     memory_multiplier: float = 1.5             # Memory growth factor (Container N = Container N-1 * 1.5)
-    base_memory_mb: float = 128                # First container memory (REDUCED from 256)
-    simulation_duration_hours: float = 0.1     # Total run time (REDUCED from 24 hours)
-    memory_multiplier_reset_interval: int = 3  # Reset memory multiplier every N containers (Part 2.3)
+    base_memory_mb: float = 862                # First container memory
+    simulation_duration_hours: float = 24      # Total run time (24 hours)
     worker_script: str = "worker/worker.py"    # Worker script path
 
 
@@ -85,6 +90,53 @@ class Scheduler:
         self.last_launch_time = 0
         self.lock = threading.Lock()
 
+        # Ready queue for containers waiting for slot or memory
+        self.ready_queue = []  # FIFO queue of containers waiting to launch
+        self.next_container_id = 1  # Track next container to create
+
+        # Calculate dynamic reset values
+        import math
+        base = config.base_memory_mb
+        mult = config.memory_multiplier
+        gpu = config.total_gpu_memory_mb
+
+        # Find the container index that would first exceed GPU memory alone
+        self.max_container_index = int(math.floor(1 + math.log(gpu / base) / math.log(mult))) if base > 0 and base <= gpu and mult > 1 else 1
+
+        # Find max simultaneous containers
+        self.max_simultaneous = 1
+        total_memory = 0
+        for i in range(min(self.max_container_index, config.max_concurrent_containers)):
+            mem = base * (mult ** i)
+            if total_memory + mem <= gpu:
+                total_memory += mem
+                self.max_simultaneous = i + 1
+            else:
+                break
+
+        # Calculate cycle memory (sum of containers in one cycle)
+        self.cycle_memory = total_memory
+
+        logger.info("=" * 80)
+        logger.info("DYNAMIC RESET CONFIGURATION (computed at startup)")
+        logger.info(f"  Base Memory: {base} MB")
+        logger.info(f"  Memory Multiplier: {mult}x")
+        logger.info(f"  Total GPU Memory: {gpu} MB")
+        logger.info(f"  Dynamic Reset Point: Container {self.max_container_index}")
+        logger.info(f"    → Would require {base * (mult ** (self.max_container_index - 1)):.1f} MB")
+        logger.info(f"    → Exceeds {gpu} MB GPU")
+        logger.info(f"  Max Simultaneous Containers: {self.max_simultaneous}")
+        logger.info(f"  Cycle Memory Usage: {self.cycle_memory:.1f} MB ({self.cycle_memory / gpu * 100:.2f}% of GPU)")
+        logger.info(f"  Reset Formula: container_index % {self.max_simultaneous} + 1")
+        logger.info("=" * 80)
+
+        # Pass dynamic values to reporter so all CSV reports use them
+        self.csv_reporter.set_dynamic_reset_info(
+            max_container_index=self.max_container_index,
+            max_simultaneous=self.max_simultaneous,
+            cycle_memory=self.cycle_memory,
+        )
+
         # Setup callbacks
         self._setup_callbacks()
 
@@ -100,33 +152,38 @@ class Scheduler:
         )
 
     def _on_container_start(self, container_id: int):
-        """Called when container starts"""
-        # Follow the state machine: CREATED → STARTING → ALLOCATING_MEMORY → RUNNING
+        """Called when container starts — record ALL state transitions"""
         self.state_tracker.update_container_state(container_id, ContainerState.STARTING)
-        self.state_tracker.update_container_state(container_id, ContainerState.ALLOCATING_MEMORY)
-        self.state_tracker.update_container_state(container_id, ContainerState.RUNNING)
+        self.csv_reporter.record_state_transition(container_id, 'STARTING', time.time())
 
-        # Get container info for memory reporting
-        container = self.state_tracker.get_container_info(container_id)
-        if container:
-            self.csv_reporter.record_state_transition(container_id, 'RUNNING', time.time())
+        self.state_tracker.update_container_state(container_id, ContainerState.ALLOCATING_MEMORY)
+        self.csv_reporter.record_state_transition(container_id, 'ALLOCATING_MEMORY', time.time())
+
+        self.state_tracker.update_container_state(container_id, ContainerState.RUNNING)
+        self.csv_reporter.record_state_transition(container_id, 'RUNNING', time.time())
 
         logger.info(f"Container {container_id} started")
 
     def _on_container_complete(self, container_id: int, success: bool):
-        """Called when container completes (either successfully or with error)"""
+        """Called when container completes — record end-of-life transitions and process queue"""
+        self.csv_reporter.record_state_transition(container_id, 'RELEASING_MEMORY', time.time())
+
+        if success:
+            self.csv_reporter.record_state_transition(container_id, 'COMPLETED', time.time())
+            self.state_tracker.reset_consecutive_oom_failures()
+        else:
+            self.csv_reporter.record_state_transition(container_id, 'FAILED', time.time())
+
         self.state_tracker.mark_container_completed(container_id, success)
         self.csv_reporter.record_container_completion(container_id, success)
 
-        # Reset consecutive OOM counter on successful completion (Requirement 5.2)
-        if success:
-            self.state_tracker.reset_consecutive_oom_failures()
-
-        # Release memory
         container = self.state_tracker.get_container_info(container_id)
         if container and container.memory_block_id:
             self.memory_manager.release(container.memory_block_id)
             logger.info(f"Released memory for container {container_id}")
+
+        # CRITICAL: After freeing memory, check if any queued containers can now launch
+        self._process_queue()
 
     def _on_container_error(self, container_id: int, error: str):
         """Called when container encounters error"""
@@ -221,53 +278,123 @@ class Scheduler:
         # monitoring or timeout scenarios if needed in the future.
         pass
 
+    def _queue_container(self, container_id, memory_mb, cycle_position, reason):
+        """Add container to ready queue with status (WAITING_SLOT or WAITING_MEMORY)"""
+        cycle_number = (container_id - 1) // self.max_container_index + 1
+        self.ready_queue.append({
+            'id': container_id,
+            'memory': memory_mb,
+            'cycle_position': cycle_position,
+            'cycle_number': cycle_number,
+            'reason': reason,
+            'queued_at': time.time()
+        })
+        self.csv_reporter.record_queue_event(container_id, memory_mb, reason, cycle_position)
+        logger.info(f"Container {container_id} QUEUED ({reason}): "
+                    f"type {cycle_position+1}/{self.max_container_index}, "
+                    f"needs {memory_mb:.0f} MB, "
+                    f"free={self.memory_manager.get_available_memory_mb():.0f} MB")
+
+    def _process_queue(self):
+        """Check if any queued containers can now launch (called after every completion)"""
+        while self.ready_queue:
+            next_c = self.ready_queue[0]
+            can_slot = self.state_tracker.can_launch_container()
+            can_mem = next_c['memory'] <= self.memory_manager.get_available_memory_mb()
+
+            if can_slot and can_mem:
+                c = self.ready_queue.pop(0)
+                wait_time = time.time() - c['queued_at']
+                logger.info(f"Container {c['id']} LAUNCHED from queue "
+                            f"(type {c['cycle_position']+1}, waited {wait_time:.1f}s)")
+                self._launch_queued_container(c['id'], c['memory'], c['cycle_position'])
+            else:
+                break  # FIFO: if head can't launch, don't try others
+
+    def _launch_queued_container(self, container_id, container_memory, cycle_position):
+        """Launch a container that was in the ready queue"""
+        memory_block_id = self.memory_manager.allocate(container_memory, container_id)
+        if memory_block_id is None:
+            logger.error(f"Failed to allocate memory for queued container {container_id}")
+            return False
+
+        # Register container
+        actual_container_id = self.state_tracker.register_container(
+            memory_mb=container_memory,
+            memory_block_id=memory_block_id,
+            duration_seconds=self.config.container_duration_seconds
+        )
+
+        # Register with CSV reporter
+        self.csv_reporter.register_container(actual_container_id, container_memory, self.config.container_duration_seconds)
+
+        # Create run config
+        worker_path = self.config.worker_script
+        if not os.path.isabs(worker_path):
+            if os.path.exists(worker_path):
+                worker_path = os.path.abspath(worker_path)
+            else:
+                worker_path = os.path.join("/app", worker_path)
+
+        run_config = ContainerRunConfig(
+            container_id=actual_container_id,
+            memory_mb=container_memory,
+            duration_seconds=self.config.container_duration_seconds,
+            worker_path=worker_path
+        )
+
+        # Launch container
+        self.container_runner.run_container(run_config)
+        logger.info(f"Launched queued container {actual_container_id}: {container_memory}MB")
+        return True
+
     def _try_launch_container(self):
-        """Try to launch a container"""
+        """Try to launch a container - process queue first, then create new if queue empty"""
         with self.lock:
-            # Check if we can launch
+            # Priority: process queued containers FIRST (FIFO fairness)
+            if self.ready_queue:
+                self._process_queue()
+                return  # Processed queue (or head is still blocked)
+
+            # Queue is empty — try to create a new container
+            # Check if we can launch a new one
             if not self.state_tracker.can_launch_container():
                 return False
 
-            # Calculate memory for next container with periodic reset to prevent starvation
-            # Part 2.3 Implementation: Memory cap policy using reset interval
-            next_container_id = len(self.state_tracker.containers) + 1
-            reset_interval = getattr(self.config, 'memory_multiplier_reset_interval', 3)
-
-            # Periodic reset: every N containers, restart from base memory
-            # This prevents unbounded growth from exceeding the 4096MB limit
-            cycle_position = (next_container_id - 1) % reset_interval
+            # Calculate memory for next container using DYNAMIC RESET
+            # Cycles through ALL container types (max_container_index)
+            # This includes C4 (2909 MB) which runs with fewer parallels
+            cycle_position = (self.next_container_id - 1) % self.max_container_index
             container_memory = self.config.base_memory_mb * (self.config.memory_multiplier ** cycle_position)
 
             logger.debug(
-                f"Container {next_container_id}: cycle_position={cycle_position}, "
-                f"reset_interval={reset_interval}, memory={container_memory}MB (Part 2.3)"
+                f"Container {self.next_container_id}: cycle_position={cycle_position}/{self.max_container_index}, "
+                f"memory={container_memory}MB (dynamic reset)"
             )
 
-            # Check memory availability
-            if container_memory > self.memory_manager.get_available_memory_mb():
-                available_memory = self.memory_manager.get_available_memory_mb()
-                logger.error(f"OOM FAILURE - Container memory allocation rejected:")
-                logger.error(f"Requested Memory: {container_memory}MB")
-                logger.error(f"Available GPU Memory: {available_memory:.2f}MB")
-                logger.error(f"Deficit: {container_memory - available_memory:.2f}MB")
-                logger.info(f"Retry: Waiting for running containers to complete and free memory")
+            # Dual check: slot AND memory must both be available
+            can_launch_slot = self.state_tracker.can_launch_container()
+            available_memory = self.memory_manager.get_available_memory_mb()
+            can_launch_memory = container_memory <= available_memory
 
-                # Track consecutive OOM failures (Requirement 5.2)
-                self.state_tracker.increment_consecutive_oom_failures()
-
-                # Check if should trigger scheduler reset
-                if self.state_tracker.should_trigger_scheduler_reset():
-                    logger.critical(f"SCHEDULER RESET TRIGGERED: 3 consecutive OOM failures detected")
-                    self.state_tracker.record_oom_event()
-                    return False
-
-                self.state_tracker.record_oom_event()
+            if not can_launch_slot:
+                # All slots full — queue this container
+                self._queue_container(self.next_container_id, container_memory, cycle_position, 'WAITING_SLOT')
+                self.next_container_id += 1
                 return False
 
-            # Allocate memory
-            memory_block_id = self.memory_manager.allocate(container_memory, len(self.state_tracker.containers) + 1)
+            if not can_launch_memory:
+                # Slot available but not enough memory — queue this container
+                logger.info(f"Container {self.next_container_id}: QUEUED (WAITING_MEMORY) "
+                           f"need {container_memory:.0f} MB, free={available_memory:.0f} MB")
+                self._queue_container(self.next_container_id, container_memory, cycle_position, 'WAITING_MEMORY')
+                self.next_container_id += 1
+                return False
+
+            # Both conditions pass — launch immediately
+            memory_block_id = self.memory_manager.allocate(container_memory, self.next_container_id)
             if memory_block_id is None:
-                logger.error("Failed to allocate memory")
+                logger.error(f"Failed to allocate memory for container {self.next_container_id}")
                 return False
 
             # Register container
@@ -283,19 +410,11 @@ class Scheduler:
             # Create run config with absolute path for worker script
             worker_path = self.config.worker_script
 
-            # ALWAYS convert to absolute path
-            # This works for both Docker and local execution
             if not os.path.isabs(worker_path):
-                # First, check if file exists relative to current directory
                 if os.path.exists(worker_path):
-                    # Local execution - convert relative to absolute
                     worker_path = os.path.abspath(worker_path)
                 else:
-                    # Docker execution - file doesn't exist relative to cwd
-                    # So construct absolute Docker path
                     worker_path = os.path.join("/app", worker_path)
-
-            logger.info(f"[PATH] Resolved worker path: {worker_path}")
 
             run_config = ContainerRunConfig(
                 container_id=container_id,
@@ -306,7 +425,8 @@ class Scheduler:
 
             # Launch container
             self.container_runner.run_container(run_config)
-            logger.info(f"Launched container {container_id}: {container_memory}MB")
+            logger.info(f"Launched container {container_id}: type {cycle_position+1}/{self.max_container_index}, {container_memory}MB")
+            self.next_container_id += 1
             return True
 
     def step(self):
@@ -323,6 +443,16 @@ class Scheduler:
             self.running = False
             return
 
+        # Record memory snapshot
+        running = self.state_tracker.get_running_containers()
+        allocated = self.memory_manager.get_allocated_memory_mb()
+        remaining = self.config.total_gpu_memory_mb - allocated
+        self.csv_reporter.record_memory_snapshot(
+            timestamp=current_time,
+            active_containers=len(running),
+            total_memory_mb=allocated,
+            remaining_memory_mb=remaining
+        )
 
         # Launch containers at regular intervals
         # Per assignment: Container N should launch every step_interval_seconds
@@ -378,18 +508,19 @@ class Scheduler:
 
 def main():
     """Main function - loads config from config.ini and runs scheduler"""
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    )
+    # Initialize logging to file and console
+    logger_local, log_path = setup_logging()
+    logger_local.info("Scheduler logging initialized")
 
     try:
         # Load configuration from config.ini
         config_loader = ConfigLoader()
-        config_loader.print_config()
 
         # Get scheduler config from config.ini
         cfg = config_loader.get_scheduler_config()
+
+        # Log configuration summary
+        log_config_summary(logger_local, cfg)
 
         # Create SchedulerConfig dataclass from config file
         config = SchedulerConfig(
@@ -404,6 +535,8 @@ def main():
         )
 
         logger.info("Starting scheduler with config from config.ini...")
+        logger.info(f"Log file: {log_path}")
+
         scheduler = Scheduler(config)
         scheduler.start()
 
@@ -418,6 +551,7 @@ def main():
             logger.info("Shutting down scheduler...")
             scheduler.stop()  # Now includes report generation and save_report() inside
             logger.info("Scheduler completed successfully!")
+            logger.info(f"Full logs available at: {log_path}")
 
     except FileNotFoundError as e:
         logger.error(f"Configuration error: {e}")
